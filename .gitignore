@@ -101,3 +101,6 @@ env/
 # Vim Swap Files
 *.swp
 *.swo
+
+# Secret file with passwords
+secrets.py
