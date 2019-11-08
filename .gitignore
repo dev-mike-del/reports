@@ -104,3 +104,6 @@ env/
 
 # Secret file with passwords
 secrets.py
+
+# Development database
+db.sqlite3
