@@ -1,6 +1,5 @@
 import datetime
 import decimal
-import uuid
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -36,30 +35,6 @@ def number():
 
 class BasicReport(models.Model):
     """docstring for BasicReport"""
-    report_id_number = models.CharField(
-        default=number, 
-        editable=False, 
-        max_length=10
-        )
-    report_id_year = models.PositiveIntegerField(
-        default=current_year, 
-        editable=False
-        )
-    version = models.DecimalField(
-        max_digits=5, 
-        decimal_places=2, 
-        editable=False,
-        )
-    correspondence_version = models.DecimalField(
-        max_digits=5, 
-        decimal_places=2, 
-        editable=False,
-        )
-    unique_id = models.UUIDField(
-        default=uuid.uuid4, 
-        editable=False, 
-        unique=True
-        )
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET(get_sentinel_user),
@@ -135,6 +110,42 @@ class BasicReport(models.Model):
     reviewer_as_string = models.CharField(
         max_length=300, 
         blank=True, 
+        )
+    report_id_number = models.CharField(
+        default=number, 
+        editable=False, 
+        max_length=10
+        )
+    report_id_year = models.PositiveIntegerField(
+        default=current_year, 
+        editable=False
+        )
+    version = models.DecimalField(
+        max_digits=5, 
+        decimal_places=2, 
+        editable=False,
+        )
+    update_comment = models.TextField(
+        max_length=5000, 
+        blank=True,
+        )
+    update = models.BooleanField(
+        default=False, 
+        blank=True,
+        )
+    typo_update = models.BooleanField(
+        default=False, 
+        blank=True,
+        )
+    date_created = models.DateTimeField(
+        auto_now_add=True,
+        )
+    date_modified = models.DateTimeField(
+        auto_now=True,
+        )
+    date_published = models.DateTimeField(
+        null=True, 
+        blank=True,
         )
     edited_in_admin_by = models.CharField(
         max_length=300, 
