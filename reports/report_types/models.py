@@ -33,6 +33,229 @@ def number():
         return '1'.zfill(9)
 
 
+class BasicReportVersion(models.Model):
+    version = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        editable=False,
+        )
+    basic_report = models.ForeignKey(
+        'BasicReport',
+        on_delete=models.CASCADE,
+        )
+    basic_report_author_as_string = models.CharField(
+        max_length=250,
+        blank=True,
+        )
+    basic_report_reviewer_as_string = models.CharField(
+        max_length=250,
+        blank=True,
+        )
+    basic_report_title = models.CharField(
+        max_length=250,
+        blank=True,
+        )
+    basic_report_title_peer_review = models.TextField(
+        max_length=1000,
+        blank=True,
+        )
+    basic_report_title_peer_review_response = models.TextField(
+        max_length=1000,
+        blank=True,
+        )
+    basic_report_executive_summary = models.TextField(
+        max_length=5000,
+        blank=True,
+        null=True,
+        )
+    basic_report_executive_summary_peer_review = models.TextField(
+        max_length=1000,
+        blank=True,
+        null=True
+        )
+    basic_report_executive_summary_peer_review_response = models.TextField(
+        max_length=1000,
+        blank=True,
+        null=True,
+        )
+    basic_report_introduction = models.TextField(
+        max_length=5000,
+        blank=True,
+        null=True,
+        )
+    basic_report_introduction_peer_review = models.TextField(
+        max_length=1000,
+        blank=True,
+        null=True
+        )
+    basic_report_introduction_peer_review_response = models.TextField(
+        max_length=1000,
+        blank=True,
+        null=True,
+        )
+    basic_report_body = models.TextField(
+        max_length=5000,
+        blank=True,
+        null=True,
+        )
+    basic_report_body_peer_review = models.TextField(
+        max_length=1000,
+        blank=True,
+        null=True
+        )
+    basic_report_body_peer_review_response = models.TextField(
+        max_length=1000,
+        blank=True,
+        null=True,
+        )
+    basic_report_conclusion = models.TextField(
+        max_length=5000,
+        blank=True,
+        null=True,
+        )
+    basic_report_conclusion_peer_review = models.TextField(
+        max_length=1000,
+        blank=True,
+        null=True
+        )
+    basic_report_conclusion_peer_review_response = models.TextField(
+        max_length=1000,
+        blank=True,
+        null=True,
+        )
+    basic_report_recommendations = models.TextField(
+        max_length=5000,
+        blank=True,
+        null=True,
+        )
+    basic_report_recommendations_peer_review = models.TextField(
+        max_length=1000,
+        blank=True,
+        null=True
+        )
+    basic_report_recommendations_peer_review_response = models.TextField(
+        max_length=1000,
+        blank=True,
+        null=True,
+        )
+    basic_report_references = models.TextField(
+        max_length=5000,
+        blank=True,
+        null=True,
+        )
+    basic_report_references_peer_review = models.TextField(
+        max_length=1000,
+        blank=True,
+        null=True
+        )
+    basic_report_references_peer_review_response = models.TextField(
+        max_length=1000,
+        blank=True,
+        null=True,
+        )
+    basic_report_tags_as_string = models.TextField(
+        max_length=5000,
+        blank=True,
+        null=True,
+        )
+    basic_report_tags_peer_review = models.TextField(
+        max_length=1000,
+        blank=True,
+        null=True
+        )
+    basic_report_tags_peer_review_response = models.TextField(
+        max_length=1000,
+        blank=True,
+        null=True,
+        ) 
+
+
+    def basic_report_tags_as_string_as_list(self):
+        return self.basic_report_tags_as_string.split(',')
+
+    def save(self, *args, **kwargs):
+        if (
+            self.basic_report.status.title == 'sent_for_edit' or
+            self.basic_report.status.title == 'typo_sent_for_edit'
+            ):
+
+            self.version = self.basic_report.version
+            self.basic_report_reviewer_as_string = (
+                self.basic_report.reviewer_as_string
+                )
+
+            self.basic_report_title = self.basic_report.title            
+            self.basic_report_title_peer_review = (
+                self.basic_report.title_peer_review
+                )
+            self.basic_report_title_peer_review_response = (
+                self.basic_report.title_peer_review_response
+                )
+
+            self.basic_report_executive_summary = (
+                self.basic_report.executive_summary
+                )
+            self.basic_report_executive_summary_peer_review = (
+                self.basic_report.executive_summary_peer_review
+                )
+            self.basic_report_executive_summary_peer_review_response = (
+                self.basic_report.executive_summary_peer_review_response
+                )
+
+            self.basic_report_introduction = self.basic_report.introduction            
+            self.basic_report_introduction_peer_review = (
+                self.basic_report.introduction_peer_review
+                )
+            self.basic_report_introduction_peer_review_response = (
+                self.basic_report.introduction_peer_review_response
+                )
+
+            self.basic_report_body = self.basic_report.body            
+            self.basic_report_body_peer_review = (
+                self.basic_report.body_peer_review
+                )
+            self.basic_report_body_peer_review_response = (
+                self.basic_report.body_peer_review_response
+                )
+
+            self.basic_report_conclusion = self.basic_report.conclusion            
+            self.basic_report_conclusion_peer_review = (
+                self.basic_report.conclusion_peer_review
+                )
+            self.basic_report_conclusion_peer_review_response = (
+                self.basic_report.conclusion_peer_review_response
+                )
+
+            self.basic_report_recommendations = (
+                self.basic_report.recommendations
+                )
+            self.basic_report_recommendations_peer_review = (
+                self.basic_report.recommendations_peer_review
+                )
+            self.basic_report_recommendations_peer_review_response = (
+                self.basic_report.recommendations_peer_review_response
+                )
+
+            self.basic_report_references = self.basic_report.references            
+            self.basic_report_references_peer_review = (
+                self.basic_report.references_peer_review
+                )
+            self.basic_report_references_peer_review_response = (
+                self.basic_report.references_peer_review_response)
+
+            self.basic_report_tags_as_string = (
+                self.basic_report.tags_as_string
+                )
+            self.basic_report_tags_peer_review = (
+                self.basic_report.tags_peer_review
+                )
+            self.basic_report_tags_peer_review_response = (
+                self.basic_report.tags_peer_review_response
+                )
+
+        super(BasicReportVersion, self).save(*args, **kwargs)
+
+
 class BasicReport(models.Model):
     """docstring for BasicReport"""
     author = models.ForeignKey(
@@ -73,7 +296,7 @@ class BasicReport(models.Model):
     introduction = models.TextField(
         max_length=100000, 
         blank=True,
-         )
+        )
     introduction_peer_review = models.TextField(
         max_length=100000, 
         blank=True,
@@ -130,7 +353,7 @@ class BasicReport(models.Model):
         max_length=100000, 
         blank=True,
         )
-    tags_str = models.TextField(
+    tags_as_string = models.TextField(
         max_length=1000, 
         blank=True,
         )
@@ -161,12 +384,12 @@ class BasicReport(models.Model):
         on_delete=models.PROTECT,
         related_name="status",
         )
-    report_id_number = models.CharField(
+    basic_report_id_number = models.CharField(
         default=number, 
         editable=False, 
         max_length=10
         )
-    report_id_year = models.PositiveIntegerField(
+    basic_report_id_year = models.PositiveIntegerField(
         default=current_year, 
         editable=False
         )
@@ -209,66 +432,51 @@ class BasicReport(models.Model):
 
     def __str__(self):
         return 'Report-{}-{}'.format(
-            self.report_id_year, 
-            self.report_id_number,
+            self.basic_report_id_year, 
+            self.basic_report_id_number,
             )
 
     def summary_history(self):
-        return ReportVersion.objects.filter(report=self).order_by('-version')
+        return BasicReportVersion.objects.filter(basic_report=self).order_by('-version')
 
     def save(self, *args, **kwargs):
-        if (self.status.title == 'published' or 
-            self.status.title == 'sent_for_review'):
-            if (self.title_peer_review or 
-                self.executive_summary_peer_review or
-                self.introduction_peer_review or
-                self.body_peer_review or
-                self.conclusion_peer_review or
-                self.recommendations_peer_review or
-                self.references_peer_review or
-                self.tags_peer_review or):
-                if self.title_peer_review:
-                    self.title_peer_review = None
-                if self.executive_summary_peer_review:
-                    self.executive_summary_peer_review = None
-                if self.introduction_peer_review:
-                    self.introduction_peer_review = None
-                if self.body_peer_review:
-                    self.body_peer_review = None
-                if self.conclusion_peer_review:
-                    self.conclusion_peer_review = None
-                if self.recommendations_peer_review:
-                    self.recommendations_peer_review = None
-                if self.references_peer_review:
-                    self.references_peer_review = None
-                if self.tags_peer_review:
-                    self.tags_peer_review = None
+        if self.status.title == 'sent_for_review':
+            self.title_peer_review = None
+            self.executive_summary_peer_review = None
+            self.introduction_peer_review = None
+            self.body_peer_review = None
+            self.conclusion_peer_review = None
+            self.recommendations_peer_review = None
+            self.references_peer_review = None
+            self.tags_peer_review = None
+
+        if self.status.title == 'sent_for_edit':
+            self.title_peer_review_response = None
+            self.executive_summary_peer_review_response = None
+            self.introduction_peer_review_response = None
+            self.body_peer_review_response = None
+            self.conclusion_peer_review_response = None
+            self.recommendations_peer_review_response = None
+            self.references_peer_review_response = None
+            self.tags_peer_review_response = None
                 
         if self.status.title == 'published':
-            if (self.title_peer_review or 
-                self.executive_summary_peer_review or
-                self.introduction_peer_review or
-                self.body_peer_review or
-                self.conclusion_peer_review or
-                self.recommendations_peer_review or
-                self.references_peer_review or
-                self.tags_peer_review or):
-                if self.title_peer_review_response:
-                    self.title_peer_review_response = None
-                if self.executive_summary_peer_review_response:
-                    self.executive_summary_peer_review_response = None
-                if self.introduction_peer_review_response:
-                    self.introduction_peer_review_response = None
-                if self.body_peer_review_response:
-                    self.body_peer_review_response = None
-                if self.conclusion_peer_review_response:
-                    self.conclusion_peer_review_response = None
-                if self.recommendations_peer_review_response:
-                    self.recommendations_peer_review_response = None
-                if self.references_peer_review_response:
-                    self.references_peer_review_response = None
-                if self.tags_peer_review_response:
-                    self.tags_peer_review_response = None
+            self.title_peer_review = None
+            self.title_peer_review_response = None
+            self.executive_summary_peer_review = None
+            self.executive_summary_peer_review_response = None
+            self.introduction_peer_review = None
+            self.introduction_peer_review_response = None
+            self.body_peer_review = None
+            self.body_peer_review_response = None
+            self.conclusion_peer_review = None
+            self.conclusion_peer_review_response = None
+            self.recommendations_peer_review = None
+            self.recommendations_peer_review_response = None
+            self.references_peer_review = None
+            self.references_peer_review_response = None
+            self.tags_peer_review = None
+            self.tags_peer_review_response = None
 
         current_version = self.version
 
@@ -295,7 +503,5 @@ class BasicReport(models.Model):
         super(BasicReport, self).save(*args, **kwargs)
 
         if self.status.title == "sent_for_edit" or self.status.title == "typo_sent_for_edit":
-            newSummary = ReportVersion(report=self)
+            newSummary = BasicReportVersion(basic_report=self)
             newSummary.save()
-
-        
