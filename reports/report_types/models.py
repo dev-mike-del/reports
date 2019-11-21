@@ -213,5 +213,89 @@ class BasicReport(models.Model):
             self.report_id_number,
             )
 
+    def summary_history(self):
+        return ReportVersion.objects.filter(report=self).order_by('-version')
+
+    def save(self, *args, **kwargs):
+        if (self.status.title == 'published' or 
+            self.status.title == 'sent_for_review'):
+            if (self.title_peer_review or 
+                self.executive_summary_peer_review or
+                self.introduction_peer_review or
+                self.body_peer_review or
+                self.conclusion_peer_review or
+                self.recommendations_peer_review or
+                self.references_peer_review or
+                self.tags_peer_review or):
+                if self.title_peer_review:
+                    self.title_peer_review = None
+                if self.executive_summary_peer_review:
+                    self.executive_summary_peer_review = None
+                if self.introduction_peer_review:
+                    self.introduction_peer_review = None
+                if self.body_peer_review:
+                    self.body_peer_review = None
+                if self.conclusion_peer_review:
+                    self.conclusion_peer_review = None
+                if self.recommendations_peer_review:
+                    self.recommendations_peer_review = None
+                if self.references_peer_review:
+                    self.references_peer_review = None
+                if self.tags_peer_review:
+                    self.tags_peer_review = None
+                
+        if self.status.title == 'published':
+            if (self.title_peer_review or 
+                self.executive_summary_peer_review or
+                self.introduction_peer_review or
+                self.body_peer_review or
+                self.conclusion_peer_review or
+                self.recommendations_peer_review or
+                self.references_peer_review or
+                self.tags_peer_review or):
+                if self.title_peer_review_response:
+                    self.title_peer_review_response = None
+                if self.executive_summary_peer_review_response:
+                    self.executive_summary_peer_review_response = None
+                if self.introduction_peer_review_response:
+                    self.introduction_peer_review_response = None
+                if self.body_peer_review_response:
+                    self.body_peer_review_response = None
+                if self.conclusion_peer_review_response:
+                    self.conclusion_peer_review_response = None
+                if self.recommendations_peer_review_response:
+                    self.recommendations_peer_review_response = None
+                if self.references_peer_review_response:
+                    self.references_peer_review_response = None
+                if self.tags_peer_review_response:
+                    self.tags_peer_review_response = None
+
+        current_version = self.version
+
+        if self.status.title == 'first_draft':
+            self.version = decimal.Decimal(.00)
+
+        elif self.status.title == 'sent_for_review' or self.status.title == 'typo_sent_for_review':
+            self.version = current_version + decimal.Decimal(.01)
+
+        elif self.status.title == 'published':
+            if self.date_published:
+                self.typo_update = False
+                self.update = False
+                self.update_comment = None
+
+                if self.typo_update:
+                    self.version = math.floor(current_version)
+                else:
+                    self.version = math.ceil(current_version)
+            else:
+                self.date_published = timezone.now()
+                self.version = math.ceil(current_version)
+      
+        super(BasicReport, self).save(*args, **kwargs)
+
+        if self.status.title == "sent_for_edit" or self.status.title == "typo_sent_for_edit":
+            newSummary = ReportVersion(report=self)
+            newSummary.save()
 
         
