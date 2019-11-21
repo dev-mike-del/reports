@@ -437,7 +437,9 @@ class BasicReport(models.Model):
             )
 
     def summary_history(self):
-        return BasicReportVersion.objects.filter(basic_report=self).order_by('-version')
+        return BasicReportVersion.objects.filter(
+            basic_report=self
+            ).order_by('-version')
 
     def save(self, *args, **kwargs):
         if self.status.title == 'sent_for_review':
@@ -483,7 +485,10 @@ class BasicReport(models.Model):
         if self.status.title == 'first_draft':
             self.version = decimal.Decimal(.00)
 
-        elif self.status.title == 'sent_for_review' or self.status.title == 'typo_sent_for_review':
+        elif (
+            self.status.title == 'sent_for_review' or
+            self.status.title == 'typo_sent_for_review'
+            ):
             self.version = current_version + decimal.Decimal(.01)
 
         elif self.status.title == 'published':
@@ -502,6 +507,9 @@ class BasicReport(models.Model):
       
         super(BasicReport, self).save(*args, **kwargs)
 
-        if self.status.title == "sent_for_edit" or self.status.title == "typo_sent_for_edit":
+        if (
+            self.status.title == "sent_for_edit" or
+            self.status.title == "typo_sent_for_edit"
+            ):
             newSummary = BasicReportVersion(basic_report=self)
             newSummary.save()
