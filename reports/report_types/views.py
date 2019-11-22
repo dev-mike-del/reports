@@ -4,7 +4,7 @@ from django.views.generic import FormView
 from report_types.forms import BasicReportForm
 
 
-class BasicReportFormView(object):
+class BasicReportFormView(FormView):
 	"""docstring for BasicReportForm"""
 	template_name = 'basic_report_form.html'
 	form_class = BasicReportForm

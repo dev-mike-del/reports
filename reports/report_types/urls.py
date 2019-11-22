@@ -1,13 +1,13 @@
 from django.urls import path
 
-from report_types.views import (Form, )
+from report_types.views import (BasicReportFormView, )
 
 app_name = 'reports'
 
 urlpatterns = [
 
     path('form', 
-        Form.as_view(),
+        BasicReportFormView.as_view(),
         name='form'),
 
 ]
