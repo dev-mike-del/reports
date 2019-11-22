@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'users',
     'status',
     'tags',
-    'reports',
+    'report_types',
 ]
 
 MIDDLEWARE = [

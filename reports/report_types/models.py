@@ -6,6 +6,9 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 
+from status.models import Status
+from tags.models import Tag
+
 
 def get_sentinel_user():
     return get_user_model().objects.get_or_create(username='deleted')[0]

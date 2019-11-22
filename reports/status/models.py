@@ -22,7 +22,7 @@ class Status(models.Model):
 try:
     first_draft = Status.objects.get(title="first_draft")
 except Exception as e:
-    raise e
+    pass
 else:
     first_draft = Status.create(title="first_draft")
     author_draft = Status.create(title="author_draft")
