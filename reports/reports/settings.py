@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'users',
     'registration',
     'accounts',
+    'project_base',
     'status',
     'tags',
     'report_types',
