@@ -12,7 +12,62 @@
     <title>{% block title %}{% endblock title %}</title>
   </head>
   <body>
-    
+    {% block nav %}
+    <!-- navbar -->
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-faded">
+      <div class="container">
+        <!-- logo -->
+        <a class="navbar-brand" href="{% url 'basic-report-list' %}">
+          <img src="{% static 'threats/images/logo_ver2.svg' %}" alt="Logo" class="img-fluid logo">
+        </a>
+        <!-- hamburger menu button  -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- navigation -->
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link text-center headernavs" href="{% url 'basic-report-list' %}">Reports</a>
+            </li>
+            <li class="nav-item mr-3">
+              <a class="nav-link text-center headernavs" href="{% url 'basic-report-list'%}">About Reports</a>
+            </li>
+          </ul> <!-- class="navbar-nav ml-auto" end -->
+          <!-- Search -->
+          <form action="{% url 'basic-report-list' %}" method="GET">
+            <div class="col-xs-8 col-xs-offset-2">
+              <div class="input-group">
+                <input name="search" type="search" class="form-control" placeholder="SEARCH" aria-label="Search">
+                <div class="input-group-append">
+                  <input type="image" src="{% static 'threats/images/mag_glass.svg'%}" class="btn btn-light magGlass" alt="Submit Form">
+                </div> <!-- class="input-group-append" end -->
+              </div> <!-- class="input-group" end -->
+            </div> <!-- class="col-xs-8 col-xs-offset-2" end -->
+          </form>
+          <!-- Search end -->
+        </div> <!-- class="collapse navbar-collapse" id="navbarNavDropdown" end -->
+      </div> <!-- class=container end -->
+    </nav> <!-- navbar end -->
+    {% endblock nav %}
+
+    {% block header %}
+    <!-- header -->
+    <div class="reportHeader">
+      <div class="reportTitle">
+        <h1 class="homeHeader">Report Watch</h1>
+        <p class="subhead">Current Report Relevant to Reports</p>
+      </div>
+    </div>
+
+    <!-- little strip of color beneath header -->
+    <div class="gradient-strip"></div>
+    {% endblock header %}
+
+
+
+
+
     {% block content %}{% endblock content %}
 
     <!-- Optional JavaScript -->
