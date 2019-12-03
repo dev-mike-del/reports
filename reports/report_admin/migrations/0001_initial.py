@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import report_types.models
+import report_admin.models
 
 
 class Migration(migrations.Migration):
@@ -47,8 +47,8 @@ class Migration(migrations.Migration):
                 ('tags_peer_review', models.TextField(blank=True, max_length=1000)),
                 ('tags_peer_review_response', models.TextField(blank=True, max_length=100000)),
                 ('reviewer_as_string', models.CharField(blank=True, max_length=300)),
-                ('basic_report_id_number', models.CharField(default=report_types.models.number, editable=False, max_length=10)),
-                ('basic_report_id_year', models.PositiveIntegerField(default=report_types.models.current_year, editable=False)),
+                ('basic_report_id_number', models.CharField(default=report_admin.models.number, editable=False, max_length=10)),
+                ('basic_report_id_year', models.PositiveIntegerField(default=report_admin.models.current_year, editable=False)),
                 ('version', models.DecimalField(decimal_places=2, editable=False, max_digits=5)),
                 ('update_comment', models.TextField(blank=True, max_length=5000)),
                 ('update', models.BooleanField(blank=True, default=False)),
@@ -57,8 +57,8 @@ class Migration(migrations.Migration):
                 ('date_modified', models.DateTimeField(auto_now=True)),
                 ('date_published', models.DateTimeField(blank=True, null=True)),
                 ('edited_in_admin_by', models.CharField(blank=True, max_length=300)),
-                ('author', models.ForeignKey(on_delete=models.SET(report_types.models.get_sentinel_user), related_name='author', to=settings.AUTH_USER_MODEL)),
-                ('reviewer', models.ForeignKey(on_delete=models.SET(report_types.models.get_sentinel_user), related_name='reviewer', to=settings.AUTH_USER_MODEL)),
+                ('author', models.ForeignKey(on_delete=models.SET(report_admin.models.get_sentinel_user), related_name='author', to=settings.AUTH_USER_MODEL)),
+                ('reviewer', models.ForeignKey(on_delete=models.SET(report_admin.models.get_sentinel_user), related_name='reviewer', to=settings.AUTH_USER_MODEL)),
                 ('status', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='status', to='status.Status')),
                 ('tags', models.ManyToManyField(blank=True, related_name='tags', to='tags.Tag')),
             ],
@@ -94,7 +94,7 @@ class Migration(migrations.Migration):
                 ('basic_report_tags_as_string', models.TextField(blank=True, max_length=5000, null=True)),
                 ('basic_report_tags_peer_review', models.TextField(blank=True, max_length=1000, null=True)),
                 ('basic_report_tags_peer_review_response', models.TextField(blank=True, max_length=1000, null=True)),
-                ('basic_report', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='report_types.BasicReport')),
+                ('basic_report', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='report_admin.BasicReport')),
             ],
         ),
     ]

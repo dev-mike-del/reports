@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from report_types.models import BasicReport, BasicReportVersion
+from report_admin.models import BasicReport, BasicReportVersion
 
 
 class BasicReportAdmin(admin.ModelAdmin):

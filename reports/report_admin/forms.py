@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from report_types.models import BasicReport
+from report_admin.models import BasicReport
 
 class BasicReportForm(ModelForm):
     class Meta:

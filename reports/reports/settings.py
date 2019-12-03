@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'project_base',
     'status',
     'tags',
-    'report_types',
+    'report_admin',
 ]
 
 MIDDLEWARE = [
