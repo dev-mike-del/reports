@@ -5,7 +5,7 @@ from report_types.forms import BasicReportForm
 
 
 class BasicReportFormView(FormView):
-	"""docstring for BasicReportForm"""
-	template_name = 'basic_report_form.html'
-	form_class = BasicReportForm
-	success_url = ''
+    """docstring for BasicReportForm"""
+    template_name = "report_types/basicreport_form.html"
+    form_class = BasicReportForm
+    success_url = ''

@@ -6,7 +6,6 @@ class BasicReportForm(ModelForm):
     class Meta:
         model = BasicReport
         fields = [
-        	'reviewer',
         	'title',
         	'executive_summary',
         	'introduction',
@@ -15,4 +14,4 @@ class BasicReportForm(ModelForm):
         	'recommendations',
         	'references',
         	'tags_as_string',
-        	]
+        	'reviewer',]

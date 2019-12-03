@@ -2,7 +2,7 @@ from django.urls import path
 
 from report_types.views import (BasicReportFormView, )
 
-app_name = 'reports'
+app_name = 'report_types'
 
 urlpatterns = [
 

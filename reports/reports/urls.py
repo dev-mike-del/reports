@@ -24,12 +24,14 @@ urlpatterns = [
         name='basic-report-list'
         ),
 
+    path('accounts/', include('django.contrib.auth.urls')),
+
     path('admin/', admin.site.urls),
 
     path('report_admin/',
         include(
             'report_types.urls', 
-            namespace='reports',
+            namespace='reports_types',
             )
         ),
 ]

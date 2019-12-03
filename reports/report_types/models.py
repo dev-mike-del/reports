@@ -428,11 +428,6 @@ class BasicReport(models.Model):
         blank=True,
         )
 
-
-    def __init__(self, arg):
-        super(BasicReport, self).__init__()
-        self.arg = arg
-
     def __str__(self):
         return 'Report-{}-{}'.format(
             self.basic_report_id_year, 
