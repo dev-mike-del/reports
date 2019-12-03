@@ -34,7 +34,7 @@ urlpatterns = [
     path('report_admin/',
         include(
             'report_types.urls', 
-            namespace='reports_types',
+            namespace='report_types',
             )
         ),
 ]
