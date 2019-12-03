@@ -1,9 +1,30 @@
 {% extends 'project_base/base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'accounts/css/profile_list.css' %}">
+{% endblock css %}
 
 {% block title %}Profile{% endblock title %}
 
 {% block content %}
 
-<h1>Profile</h1>
+<div class="container">
+	<!-- row for header and button -->
+	<div class="row headerRow">
+		<div class="col-md-6">
+			<!-- Header -->
+			<h1>Profile Dashboard</h1>
+		</div>
+
+		<div class="col-md-6">
+			<!-- Create New Report button -->
+			<div class="createNewReportBtn">
+				<a class="btn btn-info" href="{% url 'report_admin:form' %}">Create New Report</a>
+			</div>
+		</div>
+	<!-- row for header and button end -->
+	</div>
+</div>
 
 {% endblock content%}

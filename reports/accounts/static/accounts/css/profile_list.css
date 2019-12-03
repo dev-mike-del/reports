@@ -1,0 +1,17 @@
+.headerRow {
+	margin-top: 2em;
+	margin-bottom: 3em;
+}
+
+.createNewReportBtn {
+	font-size: 1em;
+	float: right;
+	font-weight: 400;
+	font-style: normal;
+}
+
+.btn {
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
