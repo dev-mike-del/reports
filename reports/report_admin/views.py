@@ -6,7 +6,17 @@ from django.views.generic import FormView, DetailView
 from report_admin.forms import BasicReportForm
 from report_admin.models import BasicReport, BasicReportVersion
 
+from status.models import Status
 from tags.models import Tag
+
+
+### Statuses ###
+edit = Status.objects.get_or_create(title="edit")
+sent_for_review = Status.objects.get_or_create(title="sent_for_review")
+sent_for_edit = Status.objects.get_or_create(title="sent_for_edit")
+review = Status.objects.get_or_create(title="review")
+published = Status.objects.get_or_create(title="published")
+archived = Status.objects.get_or_create(title="archived")
 
 
 class BasicReportFormView(
