@@ -6,12 +6,16 @@ app_name = 'report_admin'
 
 urlpatterns = [
 
-    path('form', 
-        views.BasicReportFormView.as_view(),
-        name='basic_report_form_view'),
+    path('create', 
+        views.ReportCreateView.as_view(),
+        name='create'),
+
+    path('update/<slug>', 
+        views.ReportUpdateView.as_view(),
+        name='update'),
 
     path('preview', 
-        views.BasicReportPreviewView.as_view(),
-        name='basic_report_preview_view'),
+        views.ReportPreviewView.as_view(),
+        name='preview'),
 
 ]

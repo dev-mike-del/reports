@@ -6,20 +6,27 @@ class BasicReportForm(ModelForm):
     class Meta:
         model = BasicReport
         fields = [
+            'reviewer',
         	'title',
-            'title_peer_review',
         	'executive_summary',
-            'executive_summary_peer_review',
         	'introduction',
-            'introduction_peer_review',
         	'body',
-            'body_peer_review',
         	'conclusion',
-            'conclusion_peer_review',
         	'recommendations',
-            'recommendations_peer_review',
         	'references',
-            'references_peer_review',
         	'tags_as_string',
+        	]
+
+class BasicReportCommentForm(ModelForm):
+    class Meta:
+        model = BasicReport
+        fields = [
+            'title_peer_review',
+            'executive_summary_peer_review',
+            'introduction_peer_review',
+            'body_peer_review',
+            'conclusion_peer_review',
+            'recommendations_peer_review',
+            'references_peer_review',
             'tags_peer_review',
-        	'reviewer',]
+            ]

@@ -1,10 +1,14 @@
 import datetime
 import decimal
+import itertools
+import math
+import uuid
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
+from django.utils.text import slugify
 
 from status.models import Status
 from tags.models import Tag
@@ -17,23 +21,20 @@ def current_year():
         return int(datetime.datetime.now().year)
 
 def number():
-    if BasicReport.objects.exists():
-        last_year_entered = (
-            BasicReport.objects.last().report_id_year
-            )
-        if current_year == last_year_entered:
-            no = BasicReport.objects.filter(
-                report_id_year=current_year
-                ).select_for_update().aggregate(
-                Max('report_id_number')
-                )
-            no = int(no['report_id_number__max'])+1
-            no_string = str(no).zfill(9)
-            return '{}'.format(no_string)
+        if BasicReport.objects.exists():
+            current_year = int(datetime.datetime.now().year)
+            last_year_entered = (BasicReport.objects.last()
+                                .basic_report_id_year)
+            if current_year == last_year_entered:
+                no = BasicReport.objects.select_for_update().aggregate(
+                    models.Max('basic_report_id_number'))
+                no = int(no['basic_report_id_number__max'])+1
+                no_string = str(no).zfill(9)
+                return '{}'.format(no_string)
+            else:
+                return '1'.zfill(9)
         else:
             return '1'.zfill(9)
-    else:
-        return '1'.zfill(9)
 
 
 class BasicReportVersion(models.Model):
@@ -400,6 +401,7 @@ class BasicReport(models.Model):
         max_digits=5, 
         decimal_places=2, 
         editable=False,
+        null=True
         )
     update_comment = models.TextField(
         max_length=5000, 
@@ -427,6 +429,10 @@ class BasicReport(models.Model):
         max_length=300, 
         blank=True,
         )
+    slug = models.SlugField(
+        unique=True, 
+        default=uuid.uuid4, 
+        max_length=255)
 
     def __str__(self):
         return 'Report-{}-{}'.format(
@@ -480,10 +486,7 @@ class BasicReport(models.Model):
 
         current_version = self.version
 
-        if self.status.title == 'first_draft':
-            self.version = decimal.Decimal(.00)
-
-        elif (
+        if (
             self.status.title == 'sent_for_review' or
             self.status.title == 'typo_sent_for_review'
             ):
@@ -502,6 +505,16 @@ class BasicReport(models.Model):
             else:
                 self.date_published = timezone.now()
                 self.version = math.ceil(current_version)
+
+        max_length = BasicReport._meta.get_field('slug').max_length
+        self.slug = orig = slugify(self)[:max_length]
+
+        for x in itertools.count(1):
+            if not BasicReport.objects.filter(slug=self.slug).exists():
+                break
+            if BasicReport.objects.filter(slug=self.slug, id=self.id).exists():
+                break
+            self.slug = "%s-%d" % (orig[:max_length - len(str(x)) - 1], x)
       
         super(BasicReport, self).save(*args, **kwargs)
 
