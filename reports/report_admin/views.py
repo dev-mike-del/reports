@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages import warning
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import FormView, DetailView
 
 from report_admin.forms import BasicReportForm
@@ -25,43 +25,43 @@ class BasicReportFormView(
     ):
     """docstring for BasicReportCreateView"""
     template_name = "report_admin/basicreport_form.html"
-    form_class = BasicReportForm
 
-    def get_form(self, form_class, **kwargs):
+    def get_form(self, form_class=None, **kwargs):
+        form_class = BasicReportForm
         try:
             obj = kwargs['object']
             report = BasicReport.objects.get(id=obj.id)
             return form_class(instance=report, **self.get_form_kwargs())
-        except BasicReport.DoesNotExist:
+        except KeyError:
             return form_class(**self.get_form_kwargs())
 
     def get_context_data(self, **kwargs):
-        context = super(BasicReportUpdateView,
+        context = super(BasicReportFormView,
             self).get_context_data(**kwargs)
-        report = kwargs['object']
-        # report = get_object_or_404(BasicReport,
-        #                             id=self.kwargs['pk'])
         request_user = self.request.user
-        author = report.author
-        reviewer = report.reviewer
-        status = report.status
+        try:
+            report = kwargs['object']
+            author = report.author
+            reviewer = report.reviewer
+            status = report.status
+            context['threat_tags'] = report.tags_as_string.split(",")
+            context['report'] = report
+            context["author"] = author
+            context["reviewer"] = reviewer
+            context["report_version"] = BasicReportVersion.objects.all()
+            if request_user == author:
+                return context
+            elif request_user == reviewer:
+                return context
+            else:
+                return None
+        except KeyError:
+            pass
 
-        context['tags'] = Tag.objects.all()
-        context['threat_tags'] = report.tags_as_string.split(",")
-        context["report_version"] = BasicReportVersion.objects.all()
         context["request_user"] = request_user
-        context['report'] = report
-        context["author"] = author
-        context["reviewer"] = reviewer
-
+        context['tags'] = Tag.objects.all()
+        
         return context
-
-        if request_user == author:
-            return context
-        elif request_user == reviewer:
-            return context
-        else:
-            return None
 
     def form_valid(self, form):
         report = form.save(commit=False)
@@ -125,21 +125,26 @@ class BasicReportFormView(
                     )
 
     def render_to_response(self, context, **response_kwargs):
-        request_user = self.request.user
-        report = get_object_or_404(BasicReport,
-                                    id=self.kwargs['pk'])
-        author = report.author
-        reviewer = report.reviewer
+        try:
+            request_user = self.request.user
+            report = get_object_or_404(BasicReport,
+                                        id=self.kwargs['pk'])
+            author = report.author
+            reviewer = report.reviewer
 
-        if context is None:
-            if author == request_user:
-                warning(self.request, '{} has started proofing {}'.format(reviewer, report))
-                return HttpResponseRedirect(
-                    reverse('accounts:profile')
-                    )
+            if context is None:
+                if author == request_user:
+                    warning(self.request, '{} has started proofing {}'.format(reviewer, report))
+                    return HttpResponseRedirect(
+                        reverse('accounts:profile')
+                        )
+        except KeyError:
+            pass
+
         return super(BasicReportFormView, self).render_to_response(
-            context, **response_kwargs
-        )
+                context, **response_kwargs
+            )
+        
 
 
 class BasicReportPreviewView(
