@@ -1,30 +1,95 @@
-{% extends 'project_base/base.html' %}
+{% extends 'accounts/profile_base.html' %}
 {% load static %}
-
-{% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'accounts/css/profile_list.css' %}">
-{% endblock css %}
-
-{% block title %}Profile{% endblock title %}
 
 {% block content %}
 
-<div class="container">
-	<!-- row for header and button -->
-	<div class="row headerRow">
-		<div class="col-md-6">
-			<!-- Header -->
-			<h1>Profile Dashboard</h1>
-		</div>
+  <!-- message bar -->
+  {% if messages %}
+    {% for message in messages %}
+      <div id=messageBar>
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
 
-		<div class="col-md-6">
-			<!-- Create New Report button -->
-			<div class="createNewReportBtn">
-				<a class="btn btn-info" href="{% url 'report_admin:create' %}">Create New Report</a>
-			</div>
-		</div>
-	<!-- row for header and button end -->
-	</div>
-</div>
+  <!-- row for header and button -->
+  <div class="row headerRow">
+    <div class="col-md-6">
+      <!-- Header -->
+      <h1>Report Admin Profile</h1>
+    </div>
 
-{% endblock content%}
+    <div class="col-md-6">
+      <!-- Create New Threat button -->
+      <div class="createNewReportBtn">
+        <a class="btn btn-info" href="{% url 'report_admin:create' %}">Create New Report</a>
+      </div>
+    </div>
+  <!-- row for header and button end -->
+  </div>
+
+  <div class="row">
+
+    <div class="col-lg-6">
+      <div class="reviewCol">
+        <!-- proof and publish header -->
+        <div class="reviewColHeader2">
+          <div class="profilehomeHeader">
+            Proof &amp; Publish
+          </div>
+          <div class="glassesIcon">
+            <img src="{% static 'accounts/img/glasses.svg' %}" alt="glasses icon">
+          </div>
+        </div>
+          {% if reports_to_review %}
+            {% for report in reports_to_review %}
+              {% block review_card %}
+                {{ block.super }}
+              {% endblock review_card%}
+            {% endfor %}
+          {% else %}
+            <!-- This image would sit inside the Proof and Publish section if the user is caught up. -->
+            <div class="d-flex justify-content-center caughtUp">
+             <img src="{% static 'accounts/img/proofPub_checkbox.svg' %}" alt="You're all caught up indicator">
+            </div>
+          {% endif%}
+      </div> <!-- class="reviewCol" -->
+    </div><!--  class="col-lg-6" -->
+
+    <div class="col-lg-6">
+      <div class="reviewCol">
+        <!-- proof and publish header -->
+        <div class="reviewColHeader2">
+          <div class="profilehomeHeader">
+            Edit
+          </div>
+          <div class="glassesIcon">
+            <img src="{% static 'accounts/img/glasses.svg' %}" alt="glasses icon">
+          </div>
+        </div>
+          {% if reports_to_edit %}
+            {% for report in reports_to_edit %}
+              {% block edit_card %}
+                {{ block.super }}
+              {% endblock edit_card%}
+            {% endfor %}
+          {% else %}
+            <!-- This image would sit inside the Proof and Publish section if the user is caught up. -->
+            <div class="d-flex justify-content-center caughtUp">
+             <img src="{% static 'accounts/img/proofPub_checkbox.svg' %}" alt="You're all caught up indicator">
+            </div>
+          {% endif%}
+      </div> <!-- class="reviewCol" -->
+    </div><!--  class="col-lg-6" -->
+
+  </div> <!-- class="row" -->
+
+{% endblock content %}
+
+{% block javascript %}
+  <script>
+    setTimeout(function() {
+      $('#messageBar').slideUp('slow');
+    }, 2000); // <-- time in milliseconds
+  </script>
+{% endblock javascript %}

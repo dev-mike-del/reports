@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.shortcuts import render
 from django.views.generic import ListView
 
@@ -16,7 +17,7 @@ class ProflieListView(LoginRequiredMixin, ListView):
 
         context['reports_to_review'] = self.model.objects.filter(
                                     Q(reviewer=self.request.user),
-                                    Q(status__title="sent-for-review")).all().order_by('-date_modified')
+                                    Q(status__title="sent_for_review")).all().order_by('-date_modified')
 
         context['reports_in_review'] = self.model.objects.filter(
                                     Q(reviewer=self.request.user),
@@ -24,12 +25,12 @@ class ProflieListView(LoginRequiredMixin, ListView):
 
         context['reports_sent_for_edit'] = self.model.objects.filter(
                                     Q(reviewer=self.request.user),
-                                    Q(status__title="sent-for-edit")).all().order_by('-date_modified')
+                                    Q(status__title="sent_for_edit")).all().order_by('-date_modified')
 
         
         context['reports_to_edit'] = self.model.objects.filter(
                                     Q(author=self.request.user),
-                                    Q(status__title="sent-for-edit")).all().order_by('-date_modified')
+                                    Q(status__title="sent_for_edit")).all().order_by('-date_modified')
 
     
         context['reports_in_edit'] = self.model.objects.filter(
@@ -44,6 +45,6 @@ class ProflieListView(LoginRequiredMixin, ListView):
 
         
         context['reports_sent_for_review'] = self.model.objects.filter(
-                                    Q(primary_analyst=self.request.user),
-                                    Q(status__title="sent-for-review")).all().order_by('-date_modified')
+                                    Q(author=self.request.user),
+                                    Q(status__title="sent_for_review")).all().order_by('-date_modified')
         return context
