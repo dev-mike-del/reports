@@ -1,11 +1,11 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.messages import warning
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.generic import CreateView, UpdateView, DetailView
 
-from report_admin.forms import BasicReportForm
+from report_admin.forms import BasicReportForm, BasicReportCommentForm
 from report_admin.models import BasicReport, BasicReportVersion
 
 from status.models import Status
@@ -49,8 +49,8 @@ class ReportCreateView(
         report = form.save(commit=False)
         report.status = edit
         report.author = self.request.user
-        report.author_as_string = self.request.user
-        report.reviewer_as_string = report.reviewer
+        report.author_as_string = self.request.user.username
+        report.reviewer_as_string = report.reviewer.username
         report.save()
 
         if "save_report" in self.request.POST:
@@ -60,7 +60,7 @@ class ReportCreateView(
                   kwargs={'slug': report.slug}
                   )
               )
-        elif "save_and_preview_report" in self.request.POST:
+        elif "preview_report" in self.request.POST:
             return HttpResponseRedirect(
                 reverse(
                     'report_admin:preview',
@@ -74,6 +74,16 @@ class ReportUpdateView(
     UpdateView
     ):
     """docstring for BasicReportCreateView"""
+    def get_form_kwargs(self):
+        kwargs = super(ReportUpdateView, self).get_form_kwargs()
+        report = get_object_or_404(
+            BasicReport, id=kwargs['instance'].pk)
+        if self.request.user == report.author:
+            if report.status == sent_for_edit:
+                report.status = edit
+            report.save()
+        return kwargs
+
     def render_to_response(self, context, **response_kwargs):
         try:
             report = get_object_or_404(BasicReport,
@@ -81,7 +91,7 @@ class ReportUpdateView(
             reviewer = report.reviewer
             if context is None:
                 if self.request.user == report.author:
-                    warning(self.request, '{} has started proofing {}'.format(reviewer, report))
+                    messages.warning(self.request, '{} has started proofing {}'.format(reviewer, report))
                     return HttpResponseRedirect(
                         reverse('accounts:profile')
                         )
@@ -95,61 +105,51 @@ class ReportUpdateView(
 
 class ReportPreviewView(
     LoginRequiredMixin,
-    UpdateView, 
+    UpdateView,
     DetailView
     ):
     model = BasicReport
     template_name = 'report_admin/basicreport_preview.html'
+    fields = '__all__'
 
     def get_form_kwargs(self):
         kwargs = super(ReportPreviewView, self).get_form_kwargs()
         report = get_object_or_404(
             BasicReport, id=kwargs['instance'].pk)
-        request_user = self.request.user
-        reviewer = report.reviewer
-
-        if reviewer == request_user:
+        if self.request.user == report.reviewer:
             if report.status == sent_for_review:
                 report.status = review
             report.save()
-
         return kwargs
 
     def get_context_data(self, **kwargs):
-        context = super(BasicReportPreviewView,
+        context = super(ReportPreviewView,
             self).get_context_data(**kwargs)
-        report = kwargs['object']
-        context["version"] = BasicReportVersion.objects.all()
-        context['report'] = report
-        context["author"] = report.author
-        context["reviewer"] = report.reviewer
-        context['report_tags'] = report.tags_as_string.split(",")
-
-        if self.request.user == report.author:
+        if self.request.user == context['object'].author:
             return context
-        elif self.request.user == report.reviewer:
+        elif self.request.user == context['object'].reviewer:
             return context
         else:
             return None
 
     def render_to_response(self, context, **response_kwargs):
-        report = get_object_or_404(BasicReport, id=self.kwargs['pk'])
+        report = get_object_or_404(BasicReport, id=context['object'].id)
         if context is None:
             if report.reviewer == self.request.user:
-                warning(self.request, '{} has recalled {}'.format(report.author, report))
+                messages.warning(self.request, '{} has recalled {}'.format(report.author, report))
                 return HttpResponseRedirect(
                     reverse('accounts:profile')
                     )
         return super(ReportPreviewView, 
             self).render_to_response(context,**response_kwargs)
 
-
     def form_valid(self, form):
         report = form.save(commit=False)
+
         if "edit" in self.request.POST:
             return HttpResponseRedirect(
                 reverse('report_admin:update',
-                    kwargs={'pk': report.pk}))
+                    kwargs={'slug': report.slug}))
 
         if "submit_for_review" in self.request.POST:
             report.status = sent_for_review
@@ -164,17 +164,17 @@ class ReportPreviewView(
 
         if "make_comments" in self.request.POST:
             return HttpResponseRedirect(reverse(
-                                        'report_admin:update',
-                                        kwargs={'pk': report.pk})
+                                        'report_admin:comment',
+                                        kwargs={'slug': report.slug})
                                         )
 
         if "publish" in self.request.POST:
-            for tag in threat.tags_str.split(","):
-                tag_object, created = Tag.objects.get_or_create(title=tag)
-                report.tags.add(tag_object)
+            if report.tags_as_string:
+                for tag in report.tags_as_string.split(","):
+                    tag_object, created = Tag.objects.get_or_create(title=tag)
+                    report.tags.add(tag_object)
             report.status = published
             report.save()
-            report.save_m2m()
             messages.success(
                 self.request,
                 "{} has been published.".format(
@@ -193,83 +193,28 @@ class ReportCommentView(
     UpdateView
     ):
     """docstring for BasicReportCreateView"""
-    template_name = "report_admin/basicreport_form.html"
+    template_name = "report_admin/basicreport_comment.html"
     model = BasicReport
-    fields = [
-        'reviewer',
-        'title',
-        'title_peer_review', 
-        'executive_summary',
-        'executive_summary_peer_review', 
-        'introduction',
-        'introduction_peer_review', 
-        'body',
-        'body_peer_review',
-        'conclusion',
-        'conclusion_peer_review',
-        'recommendations',
-        'recommendations_peer_review',
-        'references',
-        'references_peer_review',
-        'tags_as_string',
-        'tags_peer_review',
-        ]
+    form_class = BasicReportCommentForm
 
     def get_context_data(self, **kwargs):
-        context = super(ReportUpdateView,
+        context = super(ReportCommentView,
             self).get_context_data(**kwargs)
-        request_user = self.request.user
-        try:
-            report = kwargs['object']
-            author = report.author
-            reviewer = report.reviewer
-            status = report.status
-            context['threat_tags'] = report.tags_as_string.split(",")
-            context['report'] = report
-            context["author"] = author
-            context["reviewer"] = reviewer
-            context["report_version"] = BasicReportVersion.objects.all()
-            if request_user == author:
-                return context
-            elif request_user == reviewer:
-                return context
-            else:
-                return None
-        except KeyError:
-            pass
-
-        context["request_user"] = request_user
-        context['tags'] = Tag.objects.all()
-        
-        return context
+        if self.request.user == context['object'].reviewer:
+            return context
+        else:
+            return None
 
     def form_valid(self, form):
         report = form.save(commit=False)
-
-        if "save_report" in self.request.POST:
-            report.status = edit
-            report.save()
+        if "save" in self.request.POST:
             return HttpResponseRedirect(
-              reverse(
-                  'report_admin:update',
-                  kwargs={'object': self}
-                  )
-              )
-
-        if "save_and_preview_report" in self.request.POST:
-            report.status = edit
-            report.save()
-            return HttpResponseRedirect(
-                reverse(
-                    'report_admin:preview',
-                    kwargs={'object': self}
+                    reverse('accounts:profile')
                     )
-                )
 
         if "send_comments_to_author" in self.request.POST:
             report.status = sent_for_edit
             report.save()
-
             messages.success(
                 self.request,
                 "Your comments have been sent to {}.".format(
@@ -281,35 +226,7 @@ class ReportCommentView(
                     )
 
         if "back" in self.request.POST:
-            report.save()
             return HttpResponseRedirect(
                     reverse('report_admin:preview',
-                                kwargs={'pk': report.pk}))
+                                kwargs={'slug': report.slug}))
 
-        if "delete_draft" in self.request.POST:
-            report.status = archived
-            report.save()
-            return HttpResponseRedirect(
-                    reverse('accounts:profile')
-                    )
-
-    def render_to_response(self, context, **response_kwargs):
-        try:
-            request_user = self.request.user
-            report = get_object_or_404(BasicReport,
-                                        id=self.kwargs['pk'])
-            author = report.author
-            reviewer = report.reviewer
-
-            if context is None:
-                if author == request_user:
-                    warning(self.request, '{} has started proofing {}'.format(reviewer, report))
-                    return HttpResponseRedirect(
-                        reverse('accounts:profile')
-                        )
-        except KeyError:
-            pass
-
-        return super(ReportUpdateView, self).render_to_response(
-                context, **response_kwargs
-            )

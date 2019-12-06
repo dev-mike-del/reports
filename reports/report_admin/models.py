@@ -58,14 +58,17 @@ class BasicReportVersion(models.Model):
     basic_report_title = models.CharField(
         max_length=250,
         blank=True,
+        null=True
         )
     basic_report_title_peer_review = models.TextField(
         max_length=1000,
         blank=True,
+        null=True
         )
     basic_report_title_peer_review_response = models.TextField(
         max_length=1000,
         blank=True,
+        null=True
         )
     basic_report_executive_summary = models.TextField(
         max_length=5000,
@@ -171,6 +174,10 @@ class BasicReportVersion(models.Model):
         max_length=1000,
         blank=True,
         null=True,
+        )
+    basic_report_unique_id = models.UUIDField(
+        editable=False, 
+        unique=False
         ) 
 
 
@@ -256,6 +263,9 @@ class BasicReportVersion(models.Model):
             self.basic_report_tags_peer_review_response = (
                 self.basic_report.tags_peer_review_response
                 )
+            self.basic_report_unique_id = (
+                self.basic_report.unique_id
+                )
 
         super(BasicReportVersion, self).save(*args, **kwargs)
 
@@ -280,86 +290,107 @@ class BasicReport(models.Model):
     title_peer_review = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     title_peer_review_response = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     executive_summary = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     executive_summary_peer_review = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     executive_summary_peer_review_response = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         ) 
     introduction = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     introduction_peer_review = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     introduction_peer_review_response = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     body = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         ) 
     body_peer_review = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     body_peer_review_response = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     conclusion = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     conclusion_peer_review = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     conclusion_peer_review_response = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         ) 
     recommendations = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     recommendations_peer_review = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     recommendations_peer_review_response = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     references = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         ) 
     references_peer_review = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     references_peer_review_response = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     tags_as_string = models.TextField(
         max_length=1000, 
         blank=True,
+        null=True
         )
     tags = models.ManyToManyField(
         Tag, 
@@ -369,10 +400,12 @@ class BasicReport(models.Model):
     tags_peer_review = models.TextField(
         max_length=1000, 
         blank=True,
+        null=True
         )
     tags_peer_review_response = models.TextField(
         max_length=100000, 
         blank=True,
+        null=True
         )
     reviewer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -406,6 +439,7 @@ class BasicReport(models.Model):
     update_comment = models.TextField(
         max_length=5000, 
         blank=True,
+        null=True
         )
     update = models.BooleanField(
         default=False, 
@@ -432,7 +466,13 @@ class BasicReport(models.Model):
     slug = models.SlugField(
         unique=True, 
         default=uuid.uuid4, 
-        max_length=255)
+        max_length=255
+        )
+    unique_id = models.UUIDField(
+        default=uuid.uuid4, 
+        editable=False, 
+        unique=True
+        )
 
     def __str__(self):
         return 'Report-{}-{}'.format(
@@ -490,6 +530,9 @@ class BasicReport(models.Model):
             self.status.title == 'sent_for_review' or
             self.status.title == 'typo_sent_for_review'
             ):
+            if not current_version:
+                current_version = decimal.Decimal(.00)
+
             self.version = current_version + decimal.Decimal(.01)
 
         elif self.status.title == 'published':

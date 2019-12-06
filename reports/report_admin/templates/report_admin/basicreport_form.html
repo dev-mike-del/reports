@@ -8,8 +8,59 @@
 
 <form method="POST">
     {% csrf_token %}
-    {{ form }}
+    <h2>Reviewer</h2>
+    <p>{{ form.reviewer }}</p>
+    <h2>Title:</h2>
+    {% if form.instance.title_peer_review %}
+    	<p>{{ form.instance.title_peer_review }}</p>
+    {% endif %}
+    <p>{{ form.title }}</p>
+
+    <h2>Executive Summary:</h2>
+    {% if form.instance.executive_summary_peer_review %}
+    	<p>{{ form.instance.executive_summary_peer_review }}</p>
+    {% endif %}
+    <p>{{ form.executive_summary }}</p>
+
+    <h2>Introduction:</h2>
+    {% if form.instance.introduction_peer_review %}
+    	<p>{{ form.instance.introduction_peer_review }}</p>
+    {% endif %}
+    <p>{{ form.introduction }}</p>
+
+    <h2>Body:</h2>
+    {% if form.instance.body_peer_review %}
+    	<p>{{ form.instance.body_peer_review }}</p>
+    {% endif %}
+    <p>{{ form.body }}</p>
+
+    <h2>Conclusion:</h2>
+    {% if form.instance.conclusion_peer_review %}
+    	<p>{{ form.instance.conclusion_peer_review }}</p>
+    {% endif %}
+    <p>{{ form.conclusion }}</p>
+
+    <h2>Recommendations:</h2>
+    {% if form.instance.recommendations_peer_review %}
+    	<p>{{ form.instance.recommendations_peer_review }}</p>
+    {% endif %}
+    <p>{{ form.recommendations }}</p>
+
+    <h2>References:</h2>
+    {% if form.instance.references_peer_review %}
+    	<p>{{ form.instance.references_peer_review }}</p>
+    {% endif %}
+    <p>{{ form.references }}</p>
+
+    <h2>Tags:</h2>
+    {% if form.instance.tags_peer_review %}
+    	<p>{{ form.instance.tags_peer_review }}</p>
+    {% endif %}
+    <p>{{ form.tags_as_string }}</p>
+
+
     <input name="save_report" type="submit" value="Save" class="btn btn-outline-secondary btn-md mr-4">
+    <input name="preview_report" type="submit" value="Preview" class="btn btn-outline-secondary btn-md mr-4">
 </form>
 
 {% endblock content%}

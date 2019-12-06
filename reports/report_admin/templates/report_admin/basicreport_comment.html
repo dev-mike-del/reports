@@ -1,0 +1,49 @@
+{% extends 'project_base/base.html' %}
+
+{% block title %}Comment{% endblock title %}
+
+{% block content %}
+
+<h1>Comment</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    <p>{{ object.title }}</p>
+    <label>Title Peer Review</label>
+    <p>{{ form.title_peer_review }}</p>
+
+    <p>{{ object.executive_summary }}</p>
+    <label>Title Peer Review</label>
+    <p>{{ form.executive_summary_peer_review }}</p>
+
+    <p>{{ object.introduction }}</p>
+    <label>Title Peer Review</label>
+    <p>{{ form.introduction_peer_review }}</p>
+
+    <p>{{ object.body }}</p>
+    <label>Title Peer Review</label>
+    <p>{{ form.body_peer_review }}</p>
+
+    <p>{{ object.conclusion }}</p>
+    <label>Title Peer Review</label>
+    <p>{{ form.conclusion_peer_review }}</p>
+
+    <p>{{ object.recommendations }}</p>
+    <label>Title Peer Review</label>
+    <p>{{ form.recommendations_peer_review }}</p>
+
+    <p>{{ object.references }}</p>
+    <label>Title Peer Review</label>
+    <p>{{ form.references_peer_review }}</p>
+
+    <p>{{ object.tags_as_string }}</p>
+    <label>Title Peer Review</label>
+    <p>{{ form.tags_peer_review }}</p>
+
+    <input name="back" type="submit" value="Back" class="btn btn-outline-secondary btn-md mr-4">
+    <input name="save" type="submit" value="Save" class="btn btn-outline-secondary btn-md mr-4">
+    <input name="send_comments_to_author" type="submit" value="Send Comments To Author" class="btn btn-outline-secondary btn-md mr-4">
+</form>
+
+{% endblock content%}
+

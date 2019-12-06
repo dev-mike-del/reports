@@ -1,0 +1,21 @@
+{% extends 'project_base/base.html' %}
+
+{% block title %}Report Form{% endblock title %}
+
+{% block content %}
+
+<h1>Report Preview</h1>
+
+{{ object.title }} by {{ object.author }}
+
+<form method="POST">
+    {% csrf_token %}
+    <div hidden>{{ form }}</div>
+    <input name="edit" type="submit" value="Edit" class="btn btn-outline-secondary btn-md mr-4">
+    <input name="submit_for_review" type="submit" value="Submit For Review" class="btn btn-outline-secondary btn-md mr-4">
+
+    <input name="make_comments" type="submit" value="Make Comments" class="btn btn-outline-secondary btn-md mr-4">
+    <input name="publish" type="submit" value="Publish" class="btn btn-outline-secondary btn-md mr-4">
+</form>
+
+{% endblock content%}
