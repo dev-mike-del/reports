@@ -30,9 +30,10 @@
 
   <div class="row">
 
+
     <div class="col-lg-6">
+
       <div class="reviewCol">
-        <!-- proof and publish header -->
         <div class="reviewColHeader2">
           <div class="profilehomeHeader">
             Proof &amp; Publish
@@ -41,22 +42,46 @@
             <img src="{% static 'accounts/img/glasses.svg' %}" alt="glasses icon">
           </div>
         </div>
-          {% if reports_to_review %}
-            {% for report in reports_to_review %}
               {% block review_card %}
                 {{ block.super }}
               {% endblock review_card%}
-            {% endfor %}
-          {% else %}
-            <!-- This image would sit inside the Proof and Publish section if the user is caught up. -->
-            <div class="d-flex justify-content-center caughtUp">
-             <img src="{% static 'accounts/img/proofPub_checkbox.svg' %}" alt="You're all caught up indicator">
-            </div>
-          {% endif%}
       </div> <!-- class="reviewCol" -->
+
+      <div class="proofCol">
+        <div class="proofColHeader2">
+          <div class="proofHeader">
+            Proofs In Review
+          </div>
+          <div class="bluePlaneIcon">
+            <img src="{% static 'accounts/img/pencil.svg' %}" alt="plane">
+          </div>
+        </div>
+        {% block reports_in_review_card %}
+          {{ block.super }}
+        {% endblock reports_in_review_card %}
+      <!-- End of Send for Review -->
+      </div>
+
+      <div class="proofCol">
+        <div class="proofColHeader2">
+          <div class="proofHeader">
+            Proofs Sent Back
+          </div>
+          <div class="bluePlaneIcon">
+            <img src="{% static 'accounts/img/plane.svg' %}" alt="plane">
+          </div>
+        </div>
+        {% block sent_for_edit_card %}
+          {{ block.super }}
+        {% endblock sent_for_edit_card %}
+      <!-- End of Send for Review -->
+      </div>
+
     </div><!--  class="col-lg-6" -->
 
+
     <div class="col-lg-6">
+      
       <div class="reviewCol">
         <!-- proof and publish header -->
         <div class="reviewColHeader2">
@@ -64,22 +89,32 @@
             Edit
           </div>
           <div class="glassesIcon">
-            <img src="{% static 'accounts/img/glasses.svg' %}" alt="glasses icon">
+            <img src="{% static 'accounts/img/pencil.svg' %}" alt="glasses icon">
           </div>
         </div>
-          {% if reports_to_edit %}
-            {% for report in reports_to_edit %}
+          
               {% block edit_card %}
                 {{ block.super }}
               {% endblock edit_card%}
-            {% endfor %}
-          {% else %}
-            <!-- This image would sit inside the Proof and Publish section if the user is caught up. -->
-            <div class="d-flex justify-content-center caughtUp">
-             <img src="{% static 'accounts/img/proofPub_checkbox.svg' %}" alt="You're all caught up indicator">
-            </div>
-          {% endif%}
+
       </div> <!-- class="reviewCol" -->
+
+      <div class="proofCol">
+        <div class="proofColHeader2">
+          <div class="proofHeader">
+            In Edit
+          </div>
+          <div class="bluePlaneIcon">
+            <img src="{% static 'accounts/img/pencil.svg' %}" alt="plane">
+          </div>
+        </div>
+        {% block reports_in_edit_card %}
+          {{ block.super }}
+        {% endblock reports_in_edit_card %}
+      <!-- End of Send for Review -->
+      </div>
+
+
     </div><!--  class="col-lg-6" -->
 
   </div> <!-- class="row" -->

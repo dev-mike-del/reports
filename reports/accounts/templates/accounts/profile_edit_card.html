@@ -9,7 +9,8 @@
 
 {% block edit_card %}
   <div class="reviewPublishColumn">
-    
+    {% if reports_to_edit %}
+            {% for report in reports_to_edit %}
       <!-- review cards start -->
       <div class="homecards">
         <!-- in order to get the underline all the way accross I had to put a div in a div -->
@@ -38,14 +39,14 @@
             <div class="col-md-9">
               <div class="Homecards-title">{{ report.title }}</div>
               <div class="subtitleInfo">
-                <div class="submittedBy">Submitted by</div>
+                <div class="submittedBy">Written by</div>
                 <div class="author">{{ report.author.first_name }}</div>
                 <div class="timeAgo">{{ report.date_modified|timesince }} ago</div>
               </div>
             </div>
             <div class="col-md-3 d-flex align-items-end flex-column">
-              <a href="{% url 'report_admin:preview' slug=report.slug %}" class="btn btn-secondary mt-auto">
-                Proof
+              <a href="{% url 'report_admin:update' slug=report.slug %}" class="btn btn-secondary mt-auto">
+                Edit
               </a>
             </div>
           </div>
@@ -53,6 +54,13 @@
         </div>
       <!-- card ends -->
       </div>
+      {% endfor %}
+      {% else %}
+    <!-- This image would sit inside the Proof and Publish section if the user is caught up. -->
+            <div class="d-flex justify-content-center caughtUp">
+             <img class="caughtUpImg" src="{% static 'accounts/img/proofPub_checkbox.svg' %}" alt="You're all caught up indicator">
+            </div>
+  {% endif %}
   <!-- column ends -->
   </div>
 {% endblock edit_card%}

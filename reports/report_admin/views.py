@@ -208,6 +208,7 @@ class ReportCommentView(
     def form_valid(self, form):
         report = form.save(commit=False)
         if "save" in self.request.POST:
+            report.save()
             return HttpResponseRedirect(
                     reverse('accounts:profile')
                     )

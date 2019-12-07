@@ -9,7 +9,8 @@
 
 {% block review_card %}
   <div class="reviewPublishColumn">
-    
+    {% if reports_to_review %}
+      {% for report in reports_to_review %}
       <!-- review cards start -->
       <div class="homecards">
         <!-- in order to get the underline all the way accross I had to put a div in a div -->
@@ -54,5 +55,12 @@
       <!-- card ends -->
       </div>
   <!-- column ends -->
+  {% endfor %}
+  {% else %}
+    <!-- This image would sit inside the Proof and Publish section if the user is caught up. -->
+            <div class="d-flex justify-content-center caughtUp">
+             <img class="caughtUpImg" src="{% static 'accounts/img/proofPub_checkbox.svg' %}" alt="You're all caught up indicator">
+            </div>
+  {% endif %}
   </div>
 {% endblock review_card%}

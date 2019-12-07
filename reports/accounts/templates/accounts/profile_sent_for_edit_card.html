@@ -1,0 +1,63 @@
+{% extends 'accounts/profile_in_review_card.html' %}
+{% load static %}
+
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/profile_list.css' %}">
+{% endblock css %}
+
+{% block sent_for_edit_card %}
+  <div class="sentForReviewColumn">
+    {% if reports_sent_for_edit %}
+      {% for report in reports_sent_for_edit %}
+        <!-- review cards start -->
+        <div class="homecards">
+          <!-- in order to get the underline all the way accross I had to put a div in a div -->
+          <div class="homecards-body">
+            <div class="cardTopInfo">
+              <div class="headerID">
+                {{ report }}
+              </div>
+              {% if report.version %}
+                <div class="headerVersion">
+                  Ver {{ report.version }}
+                </div>
+              {% endif %}
+              <!-- icons on the right -->
+              <div class="topRightIcons">
+                {% if report.version %}
+                  {% if report.version > 1 %}
+                    <div class="republishIcon">
+                      re-publish
+                    </div>
+                  {% endif %}
+                {% endif %}
+                {% if report.status.title == "edit" %}
+                  <div class="draftIcon">
+                    draft
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+            <!-- bottom of card -->
+            <div class="row bottomCard">
+              <div class="col-md-9">
+                <div class="Homecards-title">{{ report.title }}</div>
+                <div class="subtitleInfo">
+                  <div class="proofedBy">Written by</div>
+                  <div class="reviewer">{{ report.author.first_name }}</div>
+                  <div class="timeAgo">| {{ report.date_modified|timesince }} ago</div>
+                </div>
+              </div>
+            <!-- <div class="col-md-3 d-flex align-items-end flex-column">
+            <a href="#" class="btn btn-secondary mt-auto">Recall</a>
+            </div> -->
+            </div>
+          <!-- bottom of card end -->
+          </div>
+        <!-- card ends -->
+        </div>
+      {% endfor %}
+    {% endif %}
+  <!-- column ends -->
+  </div>
+{% endblock sent_for_edit_card %}
