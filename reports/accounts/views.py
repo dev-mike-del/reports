@@ -35,7 +35,8 @@ class ProflieListView(LoginRequiredMixin, ListView):
     
         context['reports_in_edit'] = self.model.objects.filter(
                                     Q(author=self.request.user),
-                                    Q(status__title="edit")).all().order_by('-date_modified')
+                                    Q(status__title="edit"),
+                                    Q(version__gte=0)).all().order_by('-date_modified')
 
         
         context['new_reports_in_edit'] = self.model.objects.filter(

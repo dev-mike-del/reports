@@ -79,7 +79,8 @@ class ReportUpdateView(
         report = get_object_or_404(
             BasicReport, id=kwargs['instance'].pk)
         if self.request.user == report.author:
-            if report.status == sent_for_edit:
+            if (report.status == sent_for_edit or
+                report.status == sent_for_review):
                 report.status = edit
             report.save()
         return kwargs

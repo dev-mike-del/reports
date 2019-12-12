@@ -102,6 +102,21 @@
       <div class="proofCol">
         <div class="proofColHeader2">
           <div class="proofHeader">
+            New Reports
+          </div>
+          <div class="bluePlaneIcon">
+            <img src="{% static 'accounts/img/pencil.svg' %}" alt="plane">
+          </div>
+        </div>
+        {% block new_reports_in_edit_card %}
+          {{ block.super }}
+        {% endblock new_reports_in_edit_card %}
+      <!-- End of Send for Review -->
+      </div>
+
+      <div class="proofCol">
+        <div class="proofColHeader2">
+          <div class="proofHeader">
             In Edit
           </div>
           <div class="bluePlaneIcon">
@@ -111,6 +126,21 @@
         {% block reports_in_edit_card %}
           {{ block.super }}
         {% endblock reports_in_edit_card %}
+      <!-- End of Send for Review -->
+      </div>
+
+      <div class="proofCol">
+        <div class="proofColHeader2">
+          <div class="proofHeader">
+            Reports Sent For Review
+          </div>
+          <div class="bluePlaneIcon">
+            <img src="{% static 'accounts/img/pencil.svg' %}" alt="plane">
+          </div>
+        </div>
+        {% block reports_sent_for_review_card %}
+          {{ block.super }}
+        {% endblock reports_sent_for_review_card %}
       <!-- End of Send for Review -->
       </div>
 
