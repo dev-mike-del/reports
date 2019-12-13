@@ -48,9 +48,12 @@
                   <div class="timeAgo">| {{ report.date_modified|timesince }} ago</div>
                 </div>
               </div>
-            <!-- <div class="col-md-3 d-flex align-items-end flex-column">
-            <a href="#" class="btn btn-secondary mt-auto">Recall</a>
-            </div> -->
+            {% if report.status.title != "edit" %}
+            <div class="col-md-3 d-flex align-items-end flex-column">
+            <a href="{% url 'report_admin:comment' slug=report.slug %}" class="btn btn-secondary mt-auto">recall</a>
+            </div>
+            {% else %}
+            {%endif %}
             </div>
           <!-- bottom of card end -->
           </div>

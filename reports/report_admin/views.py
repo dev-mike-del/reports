@@ -77,7 +77,7 @@ class ReportUpdateView(
         return kwargs
 
     def get_context_data(self, **kwargs):
-        context = super(ReportCreateView,
+        context = super(ReportUpdateView,
             self).get_context_data(**kwargs)
         context['tags'] = Tag.objects.all()
         report = self.object
@@ -205,6 +205,16 @@ class ReportCommentView(
     model = BasicReport
     form_class = BasicReportCommentForm
 
+    def get_form_kwargs(self):
+        kwargs = super(ReportCommentView, self).get_form_kwargs()
+        report = get_object_or_404(
+            BasicReport, id=kwargs['instance'].pk)
+        if self.request.user == report.reviewer:
+            if report.status == sent_for_edit:
+                report.status = review
+            report.save()
+        return kwargs
+
     def get_context_data(self, **kwargs):
         context = super(ReportCommentView,
             self).get_context_data(**kwargs)
@@ -212,6 +222,30 @@ class ReportCommentView(
             return context
         else:
             return None
+
+    def render_to_response(self, context, **response_kwargs):
+        try:
+            report = get_object_or_404(BasicReport,
+                                        id=context['object'].id)
+            if report.status == edit:
+                messages.warning(self.request, '{} has started editing {}'.format(report.author, report))
+                return HttpResponseRedirect(
+                    reverse('accounts:profile')
+                    )
+        except TypeError:
+            pass
+
+        if context is None:
+            messages.warning(self.request, 'You are not the reviewer of this report')
+            return HttpResponseRedirect(
+                reverse('accounts:profile')
+                )
+        else:
+            return super(ReportCommentView, self).render_to_response(
+                    context, **response_kwargs
+                )
+
+
 
     def form_valid(self, form):
         report = form.save(commit=False)
