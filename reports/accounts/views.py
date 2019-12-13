@@ -47,5 +47,6 @@ class ProflieListView(LoginRequiredMixin, ListView):
         
         context['reports_sent_for_review'] = self.model.objects.filter(
                                     Q(author=self.request.user),
-                                    Q(status__title="sent_for_review")).all().order_by('-date_modified')
+                                    Q(status__title="sent_for_review") |
+                                    Q(status__title="review")).all().order_by('-date_modified')
         return context

@@ -34,15 +34,6 @@ class ReportCreateView(
         context = super(ReportCreateView,
             self).get_context_data(**kwargs)
         context['tags'] = Tag.objects.all()
-        try:
-            report = self.object
-            context['report'] = report
-            if self.request.user == report.author:
-                return context
-            else:
-                return None
-        except AttributeError:
-            pass
         return context
 
     def form_valid(self, form):
@@ -85,23 +76,39 @@ class ReportUpdateView(
             report.save()
         return kwargs
 
+    def get_context_data(self, **kwargs):
+        context = super(ReportCreateView,
+            self).get_context_data(**kwargs)
+        context['tags'] = Tag.objects.all()
+        report = self.object
+        context['report'] = report
+        if self.request.user == report.author:
+            return context
+        else:
+            return None
+
     def render_to_response(self, context, **response_kwargs):
         try:
             report = get_object_or_404(BasicReport,
-                                        id=self.kwargs['pk'])
-            reviewer = report.reviewer
-            if context is None:
-                if self.request.user == report.author:
-                    messages.warning(self.request, '{} has started proofing {}'.format(reviewer, report))
-                    return HttpResponseRedirect(
-                        reverse('accounts:profile')
-                        )
-        except KeyError:
+                                        id=context['object'].id)
+            if report.status == review:
+                messages.warning(self.request, '{} has started proofing {}'.format(report.reviewer, report))
+                return HttpResponseRedirect(
+                    reverse('accounts:profile')
+                    )
+        except TypeError:
             pass
 
-        return super(ReportUpdateView, self).render_to_response(
-                context, **response_kwargs
-            )
+        if context is None:
+            messages.warning(self.request, 'You are not the author of this report')
+            return HttpResponseRedirect(
+                reverse('accounts:profile')
+                )
+        else:
+            return super(ReportUpdateView, self).render_to_response(
+                    context, **response_kwargs
+                )
+
 
 
 class ReportPreviewView(
