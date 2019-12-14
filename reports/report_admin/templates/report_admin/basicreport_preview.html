@@ -1,21 +1,323 @@
 {% extends 'project_base/base.html' %}
+{% load static %}
 
-{% block title %}Report Form{% endblock title %}
+
+{% block css %}
+{{ block.super }}
+ 
+{% endblock %}
+
+
+{% block title %} {{ block.super }} Preview and Submit {% endblock %}
 
 {% block content %}
+{{ block.super }}
 
-<h1>Report Preview</h1>
+<div class="row threatReviewRow">
 
-{{ object.title }} by {{ object.author }}
+  <!-- left side column -->
+    <div class="col-lg-7">
+      <div class="headerRow">
 
-<form method="POST">
-    {% csrf_token %}
-    <div hidden>{{ form }}</div>
-    <input name="edit" type="submit" value="Edit" class="btn btn-outline-secondary btn-md mr-4">
-    <input name="submit_for_review" type="submit" value="Submit For Review" class="btn btn-outline-secondary btn-md mr-4">
+      {% if object.author == request.user %}
 
-    <input name="make_comments" type="submit" value="Make Comments" class="btn btn-outline-secondary btn-md mr-4">
-    <input name="publish" type="submit" value="Publish" class="btn btn-outline-secondary btn-md mr-4">
-</form>
+        <h1>Preview &amp; Submit</h1>
 
-{% endblock content%}
+      {% elif object.reviewer == request.user %}
+
+        <h1>Review {{ object.author.first_name }}'s Reort</h1>
+
+      {% endif %}
+
+      <h5 class="pageSubheader">
+      	{{ object }}
+      </h5>
+      </div>
+      <h4>Make Sure You:</h4>
+
+      <ul>
+        <li>Check spelling, grammar, and capitalization</li>
+        <li>Make sure all links work</li>
+      </ul>
+
+      <br>
+
+      {% if object.update_comment %}
+        <!-- Comment History section -->
+        <h4>WHAT'S CHANGED?</h4>
+        <div class="commentHistory">
+            <h7>COMMENT:</h7>
+            <p class="comment">{{ object.update_comment }}</p>
+        </div>
+      {% endif %}
+
+      {% for report_version in report_versions %}
+
+      <!-- Comment History section -->
+      <h4>Comment History</h4>
+      <div class="commentHistory">
+        {% if object.update_comment %}
+          <h7>COMMENTS:</h7>
+          <p class="comment">{{ report_version.update_comment }}</p>
+        {% endif%}
+        <p class="changedHeader">ver {{ report_version.version }}</p>
+
+            {% if report_version.basic_report_title_peer_review %}
+              <h7>Original Title:</h7>
+              <p class="origVersion">{{ report_version.basic_report_title }}</p>
+              <h7>On {{ report_version.date }} {{ report_version.basic_report_reviewer_as_string }} Commented:</h7>
+              <p class="comment">{{ report_version.basic_report_title_peer_review }}</p>
+            {% endif%}
+
+            {% if report_version.basic_report_executive_summary_peer_review %}
+              <h7>Original Executive Summary:</h7>
+              <p class="origVersion">{{ report_version.basic_report_executive_summary|safe }}</p>
+              <h7>On {{ report_version.date }} {{ report_version.basic_report_reviewer_as_string }} Commented:</h7>
+              <p class="comment">{{ report_version.basic_report_executive_summary_peer_review }}</p>
+            {% endif%}
+
+            {% if report_version.basic_report_introduction_peer_review %}
+              <h7>Original Implications:</h7>
+              <p class="origVersion">{{ report_version.basic_report_introduction|safe }}</p>
+              <h7>On {{ report_version.date }} {{ report_version.basic_report_reviewer_as_string }} Commented:</h7>
+              <p class="comment">{{ report_version.basic_report_introduction_peer_review }}</p>
+            {% endif%}
+
+            {% if report_version.basic_report_body_peer_review %}
+              <h7>Original Actions:</h7>
+              <p class="origVersion">{{ report_version.basic_report_body|safe }}</p>
+              <h7>On {{ report_version.date }} {{ report_version.basic_report_reviewer_as_string }} Commented:</h7>
+              <p class="comment">{{ report_version.basic_report_body_peer_review }}</p>
+            {% endif%}
+
+            {% if report_version.basic_report_conclusion_peer_review %}
+              <h7>Original Technical:</h7>
+              <p class="origVersion">{{ report_version.basic_report_conclusion|safe }}</p>
+              <h7>On {{ report_version.date }} {{ report_version.basic_report_reviewer_as_string }} Commented:</h7>
+              <p class="comment">{{ report_version.basic_report_conclusion_peer_review }}</p>
+            {% endif%}
+
+            {% if report_version.basic_report_recommendations_peer_review %}
+              <h7>Original Technical:</h7>
+              <p class="origVersion">{{ report_version.basic_report_recommendations|safe }}</p>
+              <h7>On {{ report_version.date }} {{ report_version.basic_report_reviewer_as_string }} Commented:</h7>
+              <p class="comment">{{ report_version.basic_report_recommendations_peer_review }}</p>
+            {% endif%}
+
+            {% if report_version.basic_report_references_peer_review %}
+              <h7>Original Technical:</h7>
+              <p class="origVersion">{{ report_version.basic_report_references|safe }}</p>
+              <h7>On {{ report_version.date }} {{ report_version.basic_report_reviewer_as_string }} Commented:</h7>
+              <p class="comment">{{ report_version.basic_report_references_peer_review }}</p>
+            {% endif%}
+
+            {% if report_version.basic_report_tags_peer_review %}
+              <h7>Original Tags:</h7>
+              <p class="origVersion">{% for tag in report_version.basic_report_tags_as_string %} {{ tag }}, {% endfor %}</p>
+              <h7>On {{ report_version.date }} {{ report_version.basic_report_reviewer_as_string }} Commented:</h7>
+              <p class="comment">{{ report_version.basic_report_tags_peer_review }}</p>
+            {% endif%}
+
+      </div>
+
+      {% endfor %}
+
+    </div>
+
+<!-- right side column (card) -->
+    <div class="col-lg-5">
+      <!-- Sets the style of the card -->
+      <div class="card previewCard">
+
+        <div class="cardDateAndTitle">
+          <!-- Nike threat ID -->
+          <p class="nikeID">{{ object}}</p>
+          <!-- Card header text -->
+          <h2 class="card-title">{{ object.title }}</h2>
+          <!-- date -->
+          {% if object.date_published == None %}
+            <p class="day_date">{{ object.date_modified }}</p>
+          {% else %}
+            <p class="day_date">{{ object.date_published }}</p>
+          {% endif %}
+        </div>
+
+        {% if object.executive_summary %}
+        <!-- Executive Summary on each card -->
+        <div class="prevExec">
+          <h5 class="mb-1">Executive Summary</h5>
+          {{ object.executive_summary|safe }}
+        </div>
+        {% endif %}
+
+        <!-- Tabs start here, the ids connect the tab-content-->
+        <ul class="nav nav-tabs nav-fill" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link tabColor active" href="#introduction_01" role="tab" data-toggle="tab">Introduction</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link tabColor" href="#body_01" role="tab" data-toggle="tab">Body</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link tabColor" href="#conclusion_01" role="tab" data-toggle="tab">Conclusion</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link tabColor" href="#recommendations_01" role="tab" data-toggle="tab">Recommendations</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link tabColor" href="#references_01" role="tab" data-toggle="tab">References</a>
+          </li>
+        </ul>
+
+        <!-- End Tabs -->
+
+        <!-- Tab panes (the body copy) start -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane fade in active show" id="introduction_01">
+            <p class="card-text">{{ object.introduction|safe }}</p>
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="body_01">
+            <p class="card-text">{{ object.body|safe }}</p>
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="conclusion_01">
+            <p class="card-text">{{ object.conclusion|safe }}</p>
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="recommendations_01">
+            <p class="card-text">{{ object.recommendations|safe }}</p>
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="references_01">
+            <p class="card-text">{{ object.references|safe }}</p>
+          </div>
+        </div>
+        <!-- Tab panes end -->
+
+        <!-- Tags area -->
+            <div class="tagArea">
+              <h4>TAGS</h4>
+              <!-- Below have placeholder tags for examples -->
+              {% for tag in report_tags %}
+              <div class="tag">{{ tag }}</div>
+              {% endfor %}
+            </div>
+
+          <!-- 'View Details' Modal -->
+          <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+
+                <!-- modal header with a gradient -->
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">{{ object.title }}</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+
+                <!-- The body of the modal  -->
+                <div class="modal-body">
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <th class="table-title" colspan="4">Details</th>
+                      </tr>
+
+                      <tr>
+                        <td colspan="2">Report ID</td>
+                        <td colspan="2">{{ object }}</td>
+                      </tr>
+                      <tr>
+                          <td colspan="2">Version</td>
+                          <td colspan="2">{{ object.version|floatformat:"1" }}</td>
+                        </tr>
+
+                      <tr>
+                        <td colspan="2">Created</td>
+                        <td colspan="2">{{ object.date_created }}</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2">Modified</td>
+                        <td colspan="2">{{ object.date_modified }}</td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+                <!-- modal body end -->
+
+                <!-- modal footer -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+
+              </div>
+            </div>
+          </div> <!-- modal end -->
+
+
+        <!-- View details button -->
+        <button type="button" class="btn btn-sm btn-block btn-viewDetails" data-toggle="modal" data-target="#exampleModalLong" >
+          view details
+        </button>
+
+      </div> <!-- card end -->
+
+
+      <form method="POST">
+      {% csrf_token %}
+
+        <div class="d-flex flex-row justify-content-between publishButtons">
+
+          <!-- <a href="new_threat.html" class="btn btn-outline-secondary">Edit</a>
+          <button type="button" class="btn btn-info" data-toggle="modal" data-target=".bd-example-modal-lg">Submit for Review</button> -->
+
+            {% if form.instance.author == request.user %}
+
+              <input name="edit" type="submit" value="Edit" class="btn btn-outline-secondary">
+
+              <input name="submit_for_review" type="submit" value="Submit for Review" class="btn btn-info">
+
+            {% elif form.instance.reviewer == request.user %}
+
+              <input name="make_comments" type="submit" value="Make Comments" class="btn btn-outline-secondary">
+
+              <input name="publish" type="submit" value="Looks Good, Publish!" class="btn btn-info">
+
+            {% endif %}
+
+        </div>
+
+      </form>
+
+
+    </div> <!-- card column / left side end -->
+
+    <!-- row end -->
+  </div>
+
+<div class="row buttonsRow">
+  <div class="col-lg-7">
+
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade bd-example-modal-lg"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-md" role="document">
+    <div class="modal-content">
+        <button type="button" class="close mr-md-2 ml-auto" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      <div class="modal-body d-flex flex-column">
+        <div class="modalMessage">Your threat has been saved and has been sent to {{ object.reviewer.first_name }} for review.</div>
+        <div class="pageButton d-flex justify-content-center">
+          <a href="index.html" class="btn btn-outline-info">Reports Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock content %}

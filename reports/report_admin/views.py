@@ -133,6 +133,10 @@ class ReportPreviewView(
     def get_context_data(self, **kwargs):
         context = super(ReportPreviewView,
             self).get_context_data(**kwargs)
+        context["report_versions"] = BasicReportVersion.objects.filter(
+            basic_report_unique_id=context['object'].unique_id
+            ).order_by('-version')
+        context['report_tags'] = context['object'].tags_as_string.split(",")
         if self.request.user == context['object'].author:
             return context
         elif self.request.user == context['object'].reviewer:

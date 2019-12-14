@@ -179,6 +179,7 @@ class BasicReportVersion(models.Model):
         editable=False, 
         unique=False
         ) 
+    date = models.DateTimeField(auto_now_add=True)
 
 
     def basic_report_tags_as_string_as_list(self):
