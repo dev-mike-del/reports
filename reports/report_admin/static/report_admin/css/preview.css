@@ -1,0 +1,190 @@
+body {
+    font-family: 'Lato', sans-serif;
+    color: #666;
+    font-size: .9em;
+    background-image: url(../img/noisy_grid.png);
+    background-repeat: repeat-y repeat-x;
+}
+
+h1 {
+    font-family: 'Oswald', sans-serif;
+    color: #484848;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 2em;
+    text-transform: uppercase;
+    margin-bottom: 0;
+}
+
+h4 {
+    color: #666;
+    font-weight: 300;
+    font-size: 1.4em;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+}
+
+h5 {
+    font-size: .9rem;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 400;
+    color: #444;
+    text-transform: uppercase;
+}
+
+tr {
+    font-family: 'Conv_HelveticaRoman', Arial, Geneva, sans-serif;
+    color: #666;
+}
+
+.btn {
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.headerRow {
+    margin-top: 2em;
+    margin-bottom: 3em;
+}
+
+.pageSubheader {
+    padding-top: .2em;
+    font-family: 'oswald', sans-serif;
+    color: #999999;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 1em;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.modal-header {
+    width: 100%;
+    margin-bottom: 0;
+    padding-bottom: ;
+    0: ;
+    background-image: -webkit-linear-gradient(0deg, #8feef6, #cc96f6);
+    background-image: linear-gradient(90deg, #8feef6, #cc96f6);
+    border-radius: 4px 4px 0 0;
+}
+
+.modal-title {
+    margin-left: .8rem;
+    font-size: 1.4rem;
+    font-family: oswald, sans-serif;
+    text-transform: uppercase;
+    text-align: center;
+    color: #333;
+}
+
+.modal-body {
+    padding-top: .2rem;
+    padding-bottom: 0;
+}
+
+.modal-footer {
+    border-radius: 0px 0px 8px 8px;
+}
+
+.previewCard {
+    margin-top: 3em;
+}
+
+.reportID {
+    margin-left: 20px;
+    margin-top: 2rem;
+    margin-bottom: .2rem;
+    font-size: 1rem;
+    color: #666;
+    letter-spacing: .04rem;
+    text-transform: uppercase;
+}
+
+.card-title {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 4px;
+    font-family: 'Oswald', sans-serif;
+    color: #2C2C2C;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1.6em;
+}
+
+.day_date {
+    margin-left: 20px;
+    margin-bottom: 8px;
+    font-size: .6rem;
+    color: #ccc;
+    letter-spacing: .04rem;
+    text-transform: uppercase;
+}
+
+.prevExec {
+    margin: 10px 20px 20px 20px;
+}
+
+.nav-item {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    color: #fff;
+    font-size: 1em;
+    margin-top: .2em;
+    text-transform: uppercase;
+    letter-spacing: .01em;
+}
+
+.tabColor {
+    font-weight: 400;
+    color: #18A2B7;
+}
+
+.tab-content {
+    padding: 1.5em;
+}
+
+.tagArea {
+    margin-left: 1.3rem;
+    margin-right: 1.1rem;
+    margin-top: -.8rem;
+    margin-bottom: 1.2rem;
+    text-transform: uppercase;
+}
+
+.tagArea h4 {
+    color: #bbb;
+    letter-spacing: .04rem;
+    display: inline-block;
+    break-after: avoid-region;
+    font-size: .6rem;
+}
+
+.tag, .sideTag {
+    display: inline-block;
+    font-size: .8rem;
+    letter-spacing: .04rem;
+    background-color: #f1f1f1;
+    padding: 5px;
+    border-radius: 3px;
+    margin-top: .3rem;
+    margin-right: .1rem;
+    border: 1px solid #e7e7e7;
+}
+
+.btn-viewDetails {
+    font-size: 1.2em;
+    color: #18A2B7;
+    background-color: #ffffff;
+    border-top: 1px solid #dee2e6;
+    padding: 1em;
+}
+
+.publishButtons {
+    margin-top: 2em;
+}
+
+.buttonsRow {
+    padding: 0em 2em 3em 2em;
+}

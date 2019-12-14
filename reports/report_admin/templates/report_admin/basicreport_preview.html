@@ -1,11 +1,10 @@
 {% extends 'project_base/base.html' %}
 {% load static %}
 
-
 {% block css %}
 {{ block.super }}
- 
-{% endblock %}
+  <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/preview.css' %}">
+{% endblock css %}
 
 
 {% block title %} {{ block.super }} Preview and Submit {% endblock %}
@@ -131,7 +130,7 @@
 
         <div class="cardDateAndTitle">
           <!-- Nike threat ID -->
-          <p class="nikeID">{{ object}}</p>
+          <p class="reportID">{{ object}}</p>
           <!-- Card header text -->
           <h2 class="card-title">{{ object.title }}</h2>
           <!-- date -->
@@ -227,7 +226,11 @@
                       </tr>
                       <tr>
                           <td colspan="2">Version</td>
-                          <td colspan="2">{{ object.version|floatformat:"1" }}</td>
+                          {% if object.version %}
+                            <td colspan="2">{{ object.version|floatformat:"1" }}</td>
+                          {% else %}
+                            <td colspan="2">0.0</td>
+                          {% endif%}
                         </tr>
 
                       <tr>
@@ -264,6 +267,7 @@
 
       <form method="POST">
       {% csrf_token %}
+      <p hidden > {{ form }}</p>
 
         <div class="d-flex flex-row justify-content-between publishButtons">
 

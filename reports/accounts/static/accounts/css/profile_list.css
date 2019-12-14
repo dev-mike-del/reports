@@ -1,3 +1,11 @@
+body {
+    font-family: 'Lato', sans-serif;
+    color: #666;
+    font-size: .9em;
+    background-image: url(../img/noisy_grid.png);
+    background-repeat: repeat-y repeat-x;
+}
+
 #messageBar {
   padding-top: .4rem;
 	width: 100%;
