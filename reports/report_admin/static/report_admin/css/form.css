@@ -12,3 +12,38 @@
 .titleRow {
     margin-bottom: 2em;
 }
+
+#cke_executiveTextArea, 
+#cke_introductionTextArea, 
+#cke_bodyTextArea, 
+#cke_conclusionTextArea, 
+#cke_recommendationsTextArea, 
+#cke_referencesTextArea {
+    max-width: 792px;
+}
+
+.reviewerCommentSection {
+    margin-top: .6em;
+    padding: .8em;
+    background-color: #EBF8FF;
+}
+
+.reviewerSaidHeader {
+    font-family: Lato, sans-serif;
+    font-weight: 300i;
+    font-size: .9em;
+    letter-spacing: .04em;
+    color: #B0BBC1;
+    margin-bottom: 0em;
+}
+
+.reviewerSaid {
+    font-family: Lato, sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    color: #D14747;
+}
+
+.tag-editor>li {
+    text-transform: uppercase;
+}

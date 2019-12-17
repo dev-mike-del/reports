@@ -1,49 +1,241 @@
 {% extends 'project_base/base.html' %}
+{% load static %}
 
-{% block title %}Comment{% endblock title %}
+{% block css %}
+{{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/preview.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/form.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/comment.css' %}">
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,900|Oswald:300,400,700" rel="stylesheet">
+  <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+{% endblock css %}
+
+
+{% block title %} {{ block.super }} Report Comment {% endblock %}
 
 {% block content %}
 
-<h1>Comment</h1>
+    <!-- row for header-->
+    <div class="row headerRow">
+        <div class="col-md-12">
+            <!-- Header -->
+            <h1>Proof {{ report.reviewer.first_name }}'s report</h1>
+            <div class="subtitle">
+                {{ report }}
+            </div>
+        </div>
+    </div> <!-- row for header end -->
 
-<form method="POST">
-    {% csrf_token %}
-    <p>{{ object.title }}</p>
-    <label>Title Peer Review</label>
-    <p>{{ form.title_peer_review }}</p>
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+            {% csrf_token %}
+                <hr>
 
-    <p>{{ object.executive_summary }}</p>
-    <label>Executive Summary Peer Review</label>
-    <p>{{ form.executive_summary_peer_review }}</p>
+                <!-- Title -->
+                <div class="form-group row">
+                    <label for="Title" class="col-md-3 col-form-label">Title</label>
+                    <div class="col-md-9">
+                        <div class="reviewPrintToScreen">
+                            <p>{{ report.title }}</p>
+                        </div>
+                    </div>
+                </div>
 
-    <p>{{ object.introduction }}</p>
-    <label>Introduction Peer Review</label>
-    <p>{{ form.introduction_peer_review }}</p>
+                <div class="form-group row">
+                    <label for="tags" class="col-md-3 col-form-label ml-auto">Comments</label>
+                    <div class="col-md-9">
+                        {{ form.title_peer_review }}
+                    </div>
+                </div>
 
-    <p>{{ object.body }}</p>
-    <label>Body Peer Review</label>
-    <p>{{ form.body_peer_review }}</p>
+                <hr>
 
-    <p>{{ object.conclusion }}</p>
-    <label>Conclusion Peer Review</label>
-    <p>{{ form.conclusion_peer_review }}</p>
+                <!-- Executive Summary -->
 
-    <p>{{ object.recommendations }}</p>
-    <label>Recommendations Peer Review</label>
-    <p>{{ form.recommendations_peer_review }}</p>
+                <div class="form-group row">
+                    <label for="Executive Summary" class="col-md-3 col-form-label">Executive Summary</label>
+                    <div class="col-md-9">
+                        <div class="reviewPrintToScreen">
+                            <p>{{ report.executive_summary|safe }}</p>
+                        </div>
+                    </div>
+                </div>
 
-    <p>{{ object.references }}</p>
-    <label>References Peer Review</label>
-    <p>{{ form.references_peer_review }}</p>
+                <div class="form-group row">
+                    <label for="tags" class="col-md-3 col-form-label ml-auto">Comments</label>
+                    <div class="col-md-9">
+                        {{ form.executive_summary_peer_review }}
+                    </div>
+                </div>
 
-    <p>{{ object.tags_as_string }}</p>
-    <label>Tags Peer Review</label>
-    <p>{{ form.tags_peer_review }}</p>
+                <hr>
 
-    <input name="back" type="submit" value="Back" class="btn btn-outline-secondary btn-md mr-4">
-    <input name="save" type="submit" value="Save" class="btn btn-outline-secondary btn-md mr-4">
-    <input name="send_comments_to_author" type="submit" value="Send Comments To Author" class="btn btn-outline-secondary btn-md mr-4">
-</form>
+                <!-- Introduction -->
+
+                <div class="form-group row">
+                    <label for="Introduction" class="col-md-3 col-form-label">Introduction</label>
+                    <div class="col-md-9">
+                        <div class="reviewPrintToScreen">
+                            <p>{{ report.introduction|safe }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="tags" class="col-md-3 col-form-label ml-auto">Comments</label>
+                    <div class="col-md-9">
+                        {{ form.introduction_peer_review }}
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Body -->
+                <div class="form-group row">
+                    <label for="Body" class="col-md-3 col-form-label">Body</label>
+                    <div class="col-md-9">
+                        <div class="reviewPrintToScreen">
+                            <p>{{ report.body|safe }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="body" class="col-md-3 col-form-label ml-auto">Comments</label>
+                    <div class="col-md-9">
+                        {{ form.body_peer_review }}
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Conclusion -->
+                <div class="form-group row">
+                    <label for="Conclusion" class="col-md-3 col-form-label">Conclusion</label>
+                    <div class="col-md-9">
+                        <div class="reviewPrintToScreen">
+                            <p>{{ report.conclusion|safe }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="tags" class="col-md-3 col-form-label ml-auto">Comments</label>
+                    <div class="col-md-9">
+                        {{ form.conclusion_peer_review }}
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Recommendations -->
+                <div class="form-group row">
+                    <label for="Recommendations" class="col-md-3 col-form-label">Recommendations</label>
+                    <div class="col-md-9">
+                        <div class="reviewPrintToScreen">
+                            <p>{{ report.recommendations|safe }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="recommendations" class="col-md-3 col-form-label ml-auto">Comments</label>
+                    <div class="col-md-9">
+                        {{ form.recommendations_peer_review }}
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- References -->
+                <div class="form-group row">
+                    <label for="References" class="col-md-3 col-form-label">References</label>
+                    <div class="col-md-9">
+                        <div class="reviewPrintToScreen">
+                            <p>{{ report.references|safe }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="tags" class="col-md-3 col-form-label ml-auto">Comments</label>
+                    <div class="col-md-9">
+                        {{ form.references_peer_review }}
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Tags -->
+                <div class="form-group row">
+                    <label for="Tags" class="col-md-3 col-form-label">Tags</label>
+                    <div class="col-md-9">
+                        <div class="reviewPrintToScreen">
+                            {% if threat.tags_as_string %}
+                                {% for tag in threat.tags_as_string %}
+                                    <div class="printedTags">{{ tag }}</div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="printedTags">This Report doesn't have any tags</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="tags" class="col-md-3 col-form-label ml-auto">Comments</label>
+                    <div class="col-md-9">
+                        {{ form.tags_peer_review }}
+                    </div>
+                </div>
+
+                <hr>
+                <!-- Tags end -->
+
+
+
+
+                <div class="saveSection row">
+                    <div class="col-md-3">
+                        <!-- empty div to offset -->
+                    </div>
+                    <div class="d-flex justify-content-end flex-wrap col-md-9">
+                        <!-- <a href="review_and_publish.html" role="button" class="btn btn-outline-secondary btn-md mr-auto" data-toggle="modal" data-target="#backAreYouSure">Back</a> -->
+
+                        <input name="back" type="submit" value="Back" class="btn btn-outline-secondary btn-md mr-auto" data-toggle="modal" data-target="#backAreYouSure">
+
+                        <input name="save" type="submit" value="Save" class="btn btn-outline-secondary btn-md mr-4">
+
+                        <input name="send_comments_to_author" type="submit" class="btn btn-info btn-md" value="Send Comments to {{ report.author.first_name }}">
+                    </div>
+                </div>
+            </form>
+
+            <!-- Modal -->
+            <div class="modal fade" id="commentsSent" tabindex="-1" role="dialog" aria-labelledby="commentsSentLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="modalMessage">
+                                Your comments have been sent to Cameron.
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary">Cyber Threats Home</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- Card Body end -->
+        </div>
+
+    <!-- Card end -->
+    </div>
+
+
+
 
 {% endblock content%}
 

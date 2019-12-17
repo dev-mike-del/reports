@@ -208,6 +208,7 @@ class ReportCommentView(
     template_name = "report_admin/basicreport_comment.html"
     model = BasicReport
     form_class = BasicReportCommentForm
+    context_object_name = 'report'
 
     def get_form_kwargs(self):
         kwargs = super(ReportCommentView, self).get_form_kwargs()
