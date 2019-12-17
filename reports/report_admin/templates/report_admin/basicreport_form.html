@@ -1,67 +1,323 @@
 {% extends 'project_base/base.html' %}
+{% load static %}
 
-{% block title %}Report Form{% endblock title %}
+{% block css %}
+{{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/preview.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/form.css' %}">
+  <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+{% endblock css %}
+
+
+{% block title %} {{ block.super }} Report Form {% endblock %}
 
 {% block content %}
-
-<h1>Report Form</h1>
-
-<form method="POST">
-    {% csrf_token %}
-    <h2>Reviewer</h2>
-    <p>{{ form.reviewer }}</p>
-    <h2>Title:</h2>
-    {% if form.instance.title_peer_review %}
-    	<p>{{ form.instance.title_peer_review }}</p>
-    {% endif %}
-    <p>{{ form.title }}</p>
-
-    <h2>Executive Summary:</h2>
-    {% if form.instance.executive_summary_peer_review %}
-    	<p>{{ form.instance.executive_summary_peer_review }}</p>
-    {% endif %}
-    <p>{{ form.executive_summary }}</p>
-
-    <h2>Introduction:</h2>
-    {% if form.instance.introduction_peer_review %}
-    	<p>{{ form.instance.introduction_peer_review }}</p>
-    {% endif %}
-    <p>{{ form.introduction }}</p>
-
-    <h2>Body:</h2>
-    {% if form.instance.body_peer_review %}
-    	<p>{{ form.instance.body_peer_review }}</p>
-    {% endif %}
-    <p>{{ form.body }}</p>
-
-    <h2>Conclusion:</h2>
-    {% if form.instance.conclusion_peer_review %}
-    	<p>{{ form.instance.conclusion_peer_review }}</p>
-    {% endif %}
-    <p>{{ form.conclusion }}</p>
-
-    <h2>Recommendations:</h2>
-    {% if form.instance.recommendations_peer_review %}
-    	<p>{{ form.instance.recommendations_peer_review }}</p>
-    {% endif %}
-    <p>{{ form.recommendations }}</p>
-
-    <h2>References:</h2>
-    {% if form.instance.references_peer_review %}
-    	<p>{{ form.instance.references_peer_review }}</p>
-    {% endif %}
-    <p>{{ form.references }}</p>
-
-    <h2>Tags:</h2>
-    {% if form.instance.tags_peer_review %}
-    	<p>{{ form.instance.tags_peer_review }}</p>
-    {% endif %}
-    <p>{{ form.tags_as_string }}</p>
+{{ block.super }}
 
 
-    <input name="save_report" type="submit" value="Save" class="btn btn-outline-secondary btn-md mr-4">
-    <input name="preview_report" type="submit" value="Preview" class="btn btn-outline-secondary btn-md mr-4">
-</form>
+    <!-- row for header and button -->
+    <div class="row headerRow">
+      <div class="col-md-12">
+        <!-- Header -->
+        {% if object %}
+          <h1>Edit Your Report</h1>
+          <div class="subtitle">
+             {{ object }} | Ver {{ object.version }}
+          </div>
+        {%else%}
+          <h1>New Report</h1>
+        {% endif %}
 
-{% endblock content%}
+      </div>
+   </div> <!-- row for header and button end -->
 
+    <div class="card">
+      <div class="card-body">
+        <form method="POST">
+        {% csrf_token %}
+        {{ form.media }}
+       
+
+        <div class="form-group row">
+          <div class="col-md-3">
+          </div>
+
+
+        </div>
+
+
+        <br>
+
+        <!-- Reviewer -->
+        <div class="form-group row">
+          <label for="Title" class="col-md-3 col-form-label">Reviewer</label>
+          <div class="col-md-9">
+            {% if object.version %}
+              <small>Change Reviewer below</small>
+            {% endif %}
+              {{ form.reviewer }}
+          </div>
+        </div>
+
+        <hr>
+
+        <!-- Title -->
+        <div class="form-group row titleRow">
+          <label for="Title" class="col-md-3 col-form-label">Title</label>
+          <div class="col-md-9">
+            {% if object.title %}
+              <small>Edit your title below</small>
+            {% endif %}
+
+            {{ form.title }}
+
+            {% if form.instance.title_peer_review %}
+              <!-- Reviewer Comment Box -->
+              <div class="reviewerCommentSection">
+                <p class="reviewerSaidHeader">{{ form.instance.reviewer.first_name }} commented:</p>
+                <p class="reviewerSaid">{{ form.instance.title_peer_review }}</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <br>
+
+
+
+        <div class="form-group row">
+
+        </div>
+        <br>
+
+
+        <!-- Executive Summary -->
+
+        <div class="form-group row">
+          <label for="Executive Summary" class="col-md-3 col-form-label">Executive Summary</label>
+          <div class="col-md-9">
+            {% if object.executive_summary %}
+              <small id="titleHelp" class="text-muted">
+              Edit Executive Summary section below
+              </small>
+            {% endif %}
+
+            {{ form.executive_summary }}
+
+            {% if form.instance.executive_summary_peer_review %}
+            <!-- Reviewer comment box  -->
+              <div class="reviewerCommentSection">
+                <p class="reviewerSaidHeader">{{ form.instance.reviewer.first_name }} commented:</p>
+                <p class="reviewerSaid">{{ form.instance.executive_summary_peer_review }}</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-md-3">
+          </div>
+        </div>
+        <br>
+
+        <!-- Introduction -->
+        <div class="form-group row">
+          <label for="Implications" class="col-md-3 col-form-label">Introduction</label>
+          <div class="col-md-9">
+            {% if object.introduction %}
+              <small id="titleHelp" class="text-muted">
+              Edit Introduction section below
+              </small>
+            {% endif %}
+
+            {{ form.introduction }}
+
+            {% if form.instance.introduction_peer_review %}
+            <!-- Reviewer comment box  -->
+              <div class="reviewerCommentSection">
+                <p class="reviewerSaidHeader">{{ form.instance.reviewer.first_name }} commented:</p>
+                <p class="reviewerSaid">{{ form.instance.introduction_peer_review }}</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-md-3">
+          </div>
+
+        </div>
+
+        <br>
+
+        <!-- Body -->
+        <div class="form-group row">
+          <label for="Actions" class="col-md-3 col-form-label">Body</label>
+          <div class="col-md-9">
+            {% if object.body %}
+              <small id="titleHelp" class="text-muted">
+              Edit Body section below
+              </small>
+            {% endif %}
+
+            {{ form.body }}
+
+            {% if form.instance.body_peer_review %}
+            <!-- Reviewer comment box  -->
+              <div class="reviewerCommentSection">
+                <p class="reviewerSaidHeader">{{ form.instance.reviewer.first_name }} commented:</p>
+                <p class="reviewerSaid">{{ form.instance.body_peer_review }}</p>
+              </div>
+            {% endif %}
+
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-md-3">
+          </div>
+
+        </div>
+
+
+        <br>
+
+        <!-- Conclusion -->
+        <div class="form-group row">
+          <label for="Technical" class="col-md-3 col-form-label">Conclusion</label>
+          <div class="col-md-9">
+            {% if object.conclusion %}
+              <small id="titleHelp" class="text-muted">
+              Edit Conclusion section below
+              </small>
+            {% endif %}
+
+            {{ form.conclusion }}
+
+            {% if form.instance.conclusion_peer_review %}
+              <!-- Reviewer comment box  -->
+              <div class="reviewerCommentSection">
+                <p class="reviewerSaidHeader">{{ form.instance.reviewer.first_name }} commented:</p>
+                <p class="reviewerSaid">{{ form.instance.conclusion_peer_review }}</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-3">
+          </div>
+
+        </div>
+
+        <br>
+
+        <!-- Recommendations -->
+        <div class="form-group row">
+          <label for="Technical" class="col-md-3 col-form-label">Recommendations</label>
+          <div class="col-md-9">
+            {% if object.recommendations %}
+              <small id="titleHelp" class="text-muted">
+              Edit Recommendations section below
+              </small>
+            {% endif %}
+
+            {{ form.recommendations }}
+
+            {% if form.instance.recommendations_peer_review %}
+              <!-- Reviewer comment box  -->
+              <div class="reviewerCommentSection">
+                <p class="reviewerSaidHeader">{{ form.instance.reviewer.first_name }} commented:</p>
+                <p class="reviewerSaid">{{ form.instance.recommendations_peer_review }}</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-3">
+          </div>
+
+        </div>
+
+        <br>
+
+
+        <!-- References -->
+        <div class="form-group row">
+          <label for="Technical" class="col-md-3 col-form-label">References</label>
+          <div class="col-md-9">
+            {% if object.references %}
+              <small id="titleHelp" class="text-muted">
+              Edit References section below
+              </small>
+            {% endif %}
+
+            {{ form.references }}
+
+            {% if form.instance.references_peer_review %}
+              <!-- Reviewer comment box  -->
+              <div class="reviewerCommentSection">
+                <p class="reviewerSaidHeader">{{ form.instance.reviewer.first_name }} commented:</p>
+                <p class="reviewerSaid">{{ form.instance.references_peer_review }}</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-3">
+          </div>
+
+        </div>
+
+
+
+        <!-- Tags -->
+        <div>
+        <div class="form-group row">
+          <label for="Tags" class="col-md-3 col-form-label">Tags</label>
+          <div class="col-md-9">
+            <small id="titleHelp" class="text-muted">Start typing to view tag list, click ENTER to create new</small>
+
+            {{ form.tags_as_string }}
+
+            {% if form.instance.tags_peer_review %}
+              <!-- Reviewer comment box  -->
+              <div class="reviewerCommentSection">
+                  <p class="reviewerSaidHeader">{{ form.instance.reviewer.first_name }} commented:</p>
+                  <p class="reviewerSaid">{{ form.instance.tags_peer_review }}</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <!-- Tags end -->
+
+        <hr>
+        </div>
+
+        <div class="saveSection">
+          <!-- <div class="form-group row"> -->
+            <div class="d-flex justify-content-end flex-wrap">
+              <div class="saveBtn">
+                <input name="save_report" type="submit" value="Save" class="btn btn-outline-secondary btn-md mr-4">
+              </div>
+              <div class="SavePreviewBtn">
+                <input name="preview_report" type="submit" value="Preview" class="btn btn-info btn-md">
+              </div>
+            </div><!-- Modal -->
+
+          <!-- save section end -->
+        </div>
+
+      </form>
+
+<!-- Card body end -->
+      </div>
+
+<!-- Card end -->
+    </div>
+
+
+{% endblock content %}
+
+{% block javascript %}
+  {{ block.super }}
+{% endblock javascript %}
