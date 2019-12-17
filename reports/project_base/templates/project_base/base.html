@@ -21,7 +21,7 @@
     <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-faded">
       <div class="container">
         <!-- logo -->
-        <a class="navbar-brand" href="{% url 'basic-report-list' %}">
+        <a class="navbar-brand" href="{% url 'list' %}">
           <img src="{% static 'threats/images/logo_ver2.svg' %}" alt="Logo" class="img-fluid logo">
         </a>
         <!-- hamburger menu button  -->
@@ -32,14 +32,14 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link text-center headernavs" href="{% url 'basic-report-list' %}">Reports</a>
+              <a class="nav-link text-center headernavs" href="{% url 'list' %}">Reports</a>
             </li>
             <li class="nav-item mr-3">
-              <a class="nav-link text-center headernavs" href="{% url 'basic-report-list'%}">About Reports</a>
+              <a class="nav-link text-center headernavs" href="{% url 'list'%}">About Reports</a>
             </li>
           </ul> <!-- class="navbar-nav ml-auto" end -->
           <!-- Search -->
-          <form action="{% url 'basic-report-list' %}" method="GET">
+          <form action="{% url 'list' %}" method="GET">
             <div class="col-xs-8 col-xs-offset-2">
               <div class="input-group">
                 <input name="search" type="search" class="form-control" placeholder="SEARCH" aria-label="Search">

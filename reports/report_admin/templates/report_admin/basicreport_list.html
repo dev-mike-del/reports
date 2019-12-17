@@ -1,9 +1,171 @@
 {% extends 'project_base/base.html' %}
+{% load static %}
 
-{% block title %}Report List{% endblock title %}
+{% block css %}
+{{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/list.css' %}">
+  <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,900|Oswald:300,400,700" rel="stylesheet">
+{% endblock css %}
+
+
+{% block title %} {{ block.super }} Report Form {% endblock %}
 
 {% block content %}
+    <!-- All the cards on the page will be in this 'row', so they'll have to be inside this div -->
+    <div class="infinite-container row">
 
-<h1>Report List</h1>
+      {% for report in reports %}
 
-{% endblock content%}
+      <!-- Card 1 start, this div sets the bootstrap media query for the card -->
+      <div class="infinite-item col-xs-12 col-sm-12 col-md-6 col-xl-4">
+
+        <!-- Sets the style of the card -->
+        <div class="card">
+
+          <!-- This sets the style of the group of cards -->
+          <div class="card-body">
+            <!-- Nike ID  -->
+            <p class="nikeID">{{ report }}</p>
+            <!-- Card header text -->
+            <h2><a href="{% url 'list' %}" class="card-title">{{ report.title }}</a></h2>
+            <!-- The little day/date that shows below the card title -->
+            <p class="day_date">{{ report.date_published |date }}</p>
+
+            <!-- Tabs start here, the ids connect the tab-content-->
+            <ul class="nav nav-tabs nav-fill" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" href="#introduction{{ report.id }}" role="tab" data-toggle="tab">Introduction</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#body{{ report.id }}" role="tab" data-toggle="tab">Body</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#conclusion{{ report.id }}" role="tab" data-toggle="tab">Conclusion</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#recommendations{{ report.id }}" role="tab" data-toggle="tab">Recommendations</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#references{{ report.id }}" role="tab" data-toggle="tab">References</a>
+              </li>
+            </ul>
+            <!-- End Tabs -->
+
+            <!-- Tab panes (the body copy) start -->
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane fade in active show" id="introduction_{{ report.id }}">
+                {{ report.introduction|safe }}
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="body_{{ report.id }}">
+                {{ report.body|safe }}
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="conclusion_{{ report.id }}">
+                {{ report.conclusion|safe }}
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="recommendations_{{ report.id }}">
+                {{ report.recommendations|safe }}
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="references_{{ report.id }}">
+                {{ report.references|safe }}
+              </div>
+            </div>
+            <!-- Tab panes end -->
+
+            <!-- 'View Details' Modal -->
+            <div class="modal fade" id="exampleModalLong_{{ report.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle_{{ report.id }}" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                  <!-- modal header with a gradient -->
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle_{{ report.id }}">{{ report.title }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+
+                  <!-- The body of the modal  -->
+                  <div class="modal-body">
+                    <table class="table">
+                      <tbody>
+                        <tr>
+                          <th class="table-title" colspan="4">Details</th>
+                        </tr>
+                        <tr>
+                          <td colspan="2">Report ID</td>
+                          <td colspan="2">{{ report }}</td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">Version</td>
+                          <td colspan="2">{{ report.version|floatformat:"1" }}</td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">Created</td>
+                          <td colspan="2">{{ report.date_created }}</td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">Modified</td>
+                          <td colspan="2">{{ report.date_modified }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- modal body end -->
+                </div>
+              </div>
+            </div> <!-- modal end -->
+
+          </div> <!-- card block end -->
+
+          {% if report.tags_str %}
+            <div class="cardTagArea">
+              <h4>tags:</h4>
+              {% for tag in report.tags_as_list %}
+
+              <a href="search?tag={{ tag|urlencode }}" class="cardTag">{{ tag }}</a>
+
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <!-- View details button -->
+          <button type="button" class="btn btn-primary btn-sm btn-block btn-viewDetails" data-toggle="modal" data-target="#exampleModalLong_{{ report.id }}" >
+            view details
+          </button>
+
+        </div> <!-- card end -->
+
+      </div> <!-- End of div that sets media queries for each card -->
+
+      {% endfor %}
+
+
+      <!-- Row end -->
+    </div>
+
+  <div class='loading' style='display: none;'>
+  </div>
+
+  {% if page_obj.has_next %}
+    <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>
+  {% endif %}
+
+
+
+{% endblock content %}
+
+{% block javascript %}
+  {{ block.super }}
+
+  <script>
+    Waypoint.offsetAliases['500-past-bottom'] = function() {
+      return this.context.innerHeight() - this.adapter.outerHeight() + 500
+    }
+    new Waypoint.Infinite({
+      element: $('.infinite-container')[0],
+      offset: '500-past-bottom'
+    })
+  </script>
+
+{% endblock javascript %}

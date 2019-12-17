@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from django.views.generic import CreateView, UpdateView, DetailView
+from django.views.generic import CreateView, UpdateView, DetailView, ListView
 
 from report_admin.forms import BasicReportForm, BasicReportCommentForm
 from report_admin.models import BasicReport, BasicReportVersion
@@ -277,3 +277,11 @@ class ReportCommentView(
                     reverse('report_admin:preview',
                                 kwargs={'slug': report.slug}))
 
+
+class BasicReportListView(ListView):
+    model = BasicReport
+    context_object_name = 'reports'
+
+    def get_queryset(self):
+        return self.model.objects.filter(status__title='published'
+            ).all().order_by('-date_published')

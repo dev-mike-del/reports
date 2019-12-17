@@ -16,12 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from reports.views import BasicReportListView
+from report_admin.views import BasicReportListView
 
 urlpatterns = [
     path('', 
         BasicReportListView.as_view(), 
-        name='basic-report-list'
+        name='list'
         ),
 
     path('accounts/', include(
