@@ -1,0 +1,97 @@
+{% extends 'project_base/base.html' %}
+{% load static %}
+
+{% block css %}
+{{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/list.css' %}">
+  <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,900|Oswald:300,400,700" rel="stylesheet">
+{% endblock css %}
+
+
+{% block title %} {{ block.super }} Report Detail {% endblock %}
+
+{% block content %}
+
+    <div class="row soloThreat">
+      <div class="col-lg-2">
+
+      </div>
+      <div class="col-lg-7">
+        <p class="day_date_solo">{{ report.date_published }}</p>
+        <h1 class="soloThreatHeader">{{ report.title }}</h1>
+
+        {% if report.executive_summary %}
+	        <h5>Executive Summary</h5>
+	        <div class="exec">
+	          <p>{{ report.executive_summary|safe }}</p>
+	        </div>
+        {% endif %}
+
+        <div class="soloText">
+        <h5>Introduction</h5>
+          {{ report.introduction|safe }}
+        <h5>Body</h5>
+          {{ report.body|safe }}
+        <h5>Conclusion</h5>
+          {{ report.conclusion|safe }}
+        <h5>Recommendations</h5>
+          {{ report.recommendations|safe }}
+         <h5>References</h5>
+          {{ report.references|safe }}
+        </div>
+      </div>
+
+
+      <div class="col-sm-3 threatSide">
+
+        <div class="sideItems">
+          <!-- Report ID -->
+          <div class="sideLabel">
+            Report ID
+          </div>
+          <div class="sideInfo">
+            {{ report }}
+          </div>
+        </div>
+
+        <div class="sideItems">
+        <!-- Version -->
+          <div class="sideLabel">
+            Version
+          </div>
+          <div class="sideInfo">
+            {{ report.version|floatformat:"1" }}
+          </div>
+        </div>
+
+        <div class="sideItems">
+          <!-- Original Publish Date -->
+          <div class="sideLabel">
+            Original Publish Date
+          </div>
+          <div class="sideInfo">
+            {{ report.date_published }}
+          </div>
+        </div>
+
+        {% if report.tags_as_string %}
+          <!-- Tags -->
+          <div class="sideTagsArea">
+          <div class="sideLabel">
+            Tags
+          </div>
+            {% for tag in report.tags.all %}
+              <a href="search?tag={{ tag|urlencode }}" class="sideCardTag">{{ tag }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+      </div>
+
+
+    </div>
+
+
+
+{% endblock content %}

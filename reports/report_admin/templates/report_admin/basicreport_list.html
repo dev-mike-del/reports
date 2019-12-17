@@ -28,7 +28,7 @@
             <!-- Nike ID  -->
             <p class="nikeID">{{ report }}</p>
             <!-- Card header text -->
-            <h2><a href="{% url 'list' %}" class="card-title">{{ report.title }}</a></h2>
+            <h2><a href="{% url 'detail' slug=report.slug %}" class="card-title">{{ report.title }}</a></h2>
             <!-- The little day/date that shows below the card title -->
             <p class="day_date">{{ report.date_published |date }}</p>
 
@@ -118,10 +118,10 @@
 
           </div> <!-- card block end -->
 
-          {% if report.tags_str %}
+          {% if report.tags_as_string %}
             <div class="cardTagArea">
               <h4>tags:</h4>
-              {% for tag in report.tags_as_list %}
+              {% for tag in report.tags.all %}
 
               <a href="search?tag={{ tag|urlencode }}" class="cardTag">{{ tag }}</a>
 

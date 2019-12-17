@@ -382,7 +382,7 @@ text-transform: uppercase;
 	padding: 0px 4px 0px 4px;
 	margin-bottom: 0.4rem;
   border-radius: 2px;
-	background-image: url("../images/lines.svg");
+	background-image: url("../img/lines.svg");
 	background-repeat: repeat-y repeat-x;
 }
 

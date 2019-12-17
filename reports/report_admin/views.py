@@ -278,10 +278,19 @@ class ReportCommentView(
                                 kwargs={'slug': report.slug}))
 
 
-class BasicReportListView(ListView):
+class ReportListView(ListView):
     model = BasicReport
     context_object_name = 'reports'
 
     def get_queryset(self):
         return self.model.objects.filter(status__title='published'
             ).all().order_by('-date_published')
+
+
+class ReportDetailView(DetailView):
+    model = BasicReport
+    context_object_name = 'report'
+
+    def get_queryset(self):
+        return self.model.objects.filter(status__title='published'
+            ).all()

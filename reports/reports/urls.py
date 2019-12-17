@@ -16,12 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from report_admin.views import BasicReportListView
+from report_admin.views import ReportListView, ReportDetailView
 
 urlpatterns = [
     path('', 
-        BasicReportListView.as_view(), 
+        ReportListView.as_view(), 
         name='list'
+        ),
+
+    path('<slug>', 
+        ReportDetailView.as_view(), 
+        name='detail'
         ),
 
     path('accounts/', include(
