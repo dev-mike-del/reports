@@ -422,12 +422,12 @@ class BasicReport(models.Model):
         on_delete=models.PROTECT,
         related_name="status",
         )
-    basic_report_id_number = models.CharField(
+    id_number = models.CharField(
         default=number, 
         editable=False, 
         max_length=10
         )
-    basic_report_id_year = models.PositiveIntegerField(
+    id_year = models.PositiveIntegerField(
         default=current_year, 
         editable=False
         )
@@ -477,8 +477,8 @@ class BasicReport(models.Model):
 
     def __str__(self):
         return 'Report-{}-{}'.format(
-            self.basic_report_id_year, 
-            self.basic_report_id_number,
+            self.id_year, 
+            self.id_number,
             )
 
     def summary_history(self):
