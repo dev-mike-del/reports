@@ -27,7 +27,7 @@ class BasicReportForm(forms.ModelForm):
                                         "class": "form-control",
                                         "id": "TitleTextArea",
                                         "maxlength": 60,
-                                        "placeholder": "E.g. 'Cybercriminals Perform Attacks Against S3 Buckets'"},
+                                        "placeholder": "E.g. 'Daily Business Report'"},
                                            ),
                             required=False,)
 

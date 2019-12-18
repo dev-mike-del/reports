@@ -4,7 +4,7 @@
 {% block css %}
 {{ block.super }}
   <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/list.css' %}">
-  <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+  <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,900|Oswald:300,400,700" rel="stylesheet">
 {% endblock css %}
 
@@ -35,19 +35,19 @@
             <!-- Tabs start here, the ids connect the tab-content-->
             <ul class="nav nav-tabs nav-fill" role="tablist">
               <li class="nav-item">
-                <a class="nav-link active" href="#introduction{{ report.id }}" role="tab" data-toggle="tab">Introduction</a>
+                <a class="nav-link active" href="#introduction_{{ report.id }}" role="tab" data-toggle="tab">Introduction</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#body{{ report.id }}" role="tab" data-toggle="tab">Body</a>
+                <a class="nav-link" href="#body_{{ report.id }}" role="tab" data-toggle="tab">Body</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#conclusion{{ report.id }}" role="tab" data-toggle="tab">Conclusion</a>
+                <a class="nav-link" href="#conclusion_{{ report.id }}" role="tab" data-toggle="tab">Conclusion</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#recommendations{{ report.id }}" role="tab" data-toggle="tab">Recommendations</a>
+                <a class="nav-link" href="#recommendations_{{ report.id }}" role="tab" data-toggle="tab">Recommendations</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#references{{ report.id }}" role="tab" data-toggle="tab">References</a>
+                <a class="nav-link" href="#references_{{ report.id }}" role="tab" data-toggle="tab">References</a>
               </li>
             </ul>
             <!-- End Tabs -->
@@ -150,8 +150,6 @@
   {% if page_obj.has_next %}
     <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>
   {% endif %}
-
-
 
 {% endblock content %}
 
