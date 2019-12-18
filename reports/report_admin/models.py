@@ -23,9 +23,13 @@ def current_year():
 def number():
         if BasicReport.objects.exists():
             current_year = int(datetime.datetime.now().year)
-            last_year_entered = (BasicReport.objects.last().id_year)
+            try:
+                last_year_entered = (BasicReport.objects.filter(version__gte=1).last().id_year)
+            except AttributeError:
+                last_year_entered = 1
             if current_year == last_year_entered:
-                no = BasicReport.objects.filter(version >= 1).select_for_update().aggregate(
+                print("{} = {}".format(current_year,last_year_entered))
+                no = BasicReport.objects.filter(version__gte=1).select_for_update().aggregate(
                     models.Max('id_number'))
                 no = int(no['id_number__max'])+1
                 no_string = str(no).zfill(9)
