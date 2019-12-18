@@ -23,8 +23,7 @@ def current_year():
 def number():
         if BasicReport.objects.exists():
             current_year = int(datetime.datetime.now().year)
-            last_year_entered = (BasicReport.objects.last()
-                                .basic_report_id_year)
+            last_year_entered = (BasicReport.objects.last().id_year)
             if current_year == last_year_entered:
                 no = BasicReport.objects.filter(version >= 1).select_for_update().aggregate(
                     models.Max('id_number'))
@@ -425,11 +424,13 @@ class BasicReport(models.Model):
     id_number = models.CharField(
         null=True,
         editable=True, 
-        max_length=10
+        max_length=10,
+        blank=True
         )
     id_year = models.PositiveIntegerField(
         null=True,
-        editable=True
+        editable=True,
+        blank=True
         )
     version = models.DecimalField(
         max_digits=5, 
@@ -467,7 +468,8 @@ class BasicReport(models.Model):
     slug = models.SlugField(
         unique=True, 
         default=uuid.uuid4, 
-        max_length=255
+        max_length=255,
+        editable=True,
         )
     unique_id = models.UUIDField(
         default=uuid.uuid4, 
@@ -476,15 +478,14 @@ class BasicReport(models.Model):
         )
 
     def __str__(self):
-        try:
-            if (self.status.title == "published" or
-            self.version >= 1):
-                return 'Report-{}-{}'.format(
-                    self.id_year, 
-                    self.id_number,
-                    )
-        except TypeError:
-            return 'Report-{}'.format(self.slug)
+        if (self.version == None or
+            self.version < 1):
+            return "Report-{}".format(self.slug)
+        else:
+            return 'Report-{}-{}'.format(
+            self.id_year, 
+            self.id_number,
+            )
 
     def summary_history(self):
         return BasicReportVersion.objects.filter(
@@ -554,6 +555,11 @@ class BasicReport(models.Model):
             self.references_peer_review_response = None
             self.tags_peer_review = None
             self.tags_peer_review_response = None
+
+            year = current_year()
+            num = number()
+            self.id_year = year
+            self.id_number = num
 
             if self.version == 1:
                 max_length = BasicReport._meta.get_field('slug').max_length

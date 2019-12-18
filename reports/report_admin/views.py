@@ -150,6 +150,7 @@ class ReportPreviewView(
             return None
 
     def render_to_response(self, context, **response_kwargs):
+        print("I'm in the render_to_response function")
         report = get_object_or_404(BasicReport, id=context['object'].id)
         if context is None:
             if report.reviewer == self.request.user:
@@ -161,6 +162,7 @@ class ReportPreviewView(
             self).render_to_response(context,**response_kwargs)
 
     def form_valid(self, form):
+        print("I'm in the form_valid function")
         report = form.save(commit=False)
 
         if "edit" in self.request.POST:

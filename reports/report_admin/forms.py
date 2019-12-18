@@ -191,7 +191,7 @@ class BasicReportForm(forms.ModelForm):
     class Meta:
         model = BasicReport
         fields = [
-            'reviewer',
+          'reviewer',
         	'title',
         	'executive_summary',
         	'introduction',
@@ -200,15 +200,16 @@ class BasicReportForm(forms.ModelForm):
         	'recommendations',
         	'references',
         	'tags_as_string',
-            'title_peer_review',
-            'executive_summary_peer_review',
-            'introduction_peer_review',
-            'body_peer_review',
-            'conclusion_peer_review',
-            'recommendations_peer_review',
-            'references_peer_review',
-            'tags_peer_review',
+          'title_peer_review',
+          'executive_summary_peer_review',
+          'introduction_peer_review',
+          'body_peer_review',
+          'conclusion_peer_review',
+          'recommendations_peer_review',
+          'references_peer_review',
+          'tags_peer_review',
         	]
+          
     def __init__(self, *args, **kwargs):
         user = kwargs['initial'].pop('user', None)
         super(BasicReportForm, self).__init__(*args, **kwargs)

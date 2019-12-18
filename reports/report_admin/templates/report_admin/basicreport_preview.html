@@ -5,7 +5,7 @@
 {{ block.super }}
   <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/preview.css' %}">
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,900|Oswald:300,400,700" rel="stylesheet">
-  <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+  <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
 {% endblock css %}
 
 
@@ -269,12 +269,8 @@
 
       <form method="POST">
       {% csrf_token %}
-      <p hidden > {{ form }}</p>
-
         <div class="d-flex flex-row justify-content-between publishButtons">
-
-          <!-- <a href="new_threat.html" class="btn btn-outline-secondary">Edit</a>
-          <button type="button" class="btn btn-info" data-toggle="modal" data-target=".bd-example-modal-lg">Submit for Review</button> -->
+        <div hidden>{{form}}</div>
 
             {% if form.instance.author == request.user %}
 
@@ -289,7 +285,6 @@
               <input name="publish" type="submit" value="Looks Good, Publish!" class="btn btn-info">
 
             {% endif %}
-
         </div>
 
       </form>
