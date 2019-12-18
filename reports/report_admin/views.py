@@ -30,6 +30,11 @@ class ReportCreateView(
     model = BasicReport
     form_class = BasicReportForm
 
+    def get_form_kwargs(self):
+        kwargs = super(ReportCreateView, self).get_form_kwargs()
+        kwargs['initial'].update({'user': self.request.user})
+        return kwargs
+
     def get_context_data(self, **kwargs):
         context = super(ReportCreateView,
             self).get_context_data(**kwargs)

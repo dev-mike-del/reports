@@ -3,10 +3,12 @@
 
 {% block css %}
 {{ block.super }}
+  <link href="{% static 'report_admin/css/jquery.tag-editor.css' %}" rel="stylesheet" type="text/css" media="all">
   <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/preview.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/form.css' %}">
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,900|Oswald:300,400,700" rel="stylesheet">
-  <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+  
+ 
 {% endblock css %}
 
 
@@ -315,10 +317,29 @@
 
 <!-- Card end -->
     </div>
-
-
 {% endblock content %}
 
 {% block javascript %}
-  {{ block.super }}
+{{ block.super }}
+  <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.10.2/jquery-ui.min.js"></script>
+  <script src="{% static 'report_admin/js/jquery.caret.min.js' %}"></script>
+
+  <script 
+  type="text/javascript" 
+  src="{% static 'report_admin/js/jquery.tag-editor.js' %}"></script>
+
+  <script type="text/javascript">
+    $('#tags').tagEditor({
+    autocomplete: {
+        delay: 0, // show suggestions immediately
+        position: { collision: 'flip' }, // automatic menu position up/down
+        source: [{% for tag in tags %} "{{tag|upper}}", {% endfor %}]
+    },
+    forceLowercase: false,
+    placeholder: 'Report tags ...'
+    });
+  </script>
 {% endblock javascript %}
+

@@ -173,7 +173,7 @@ class BasicReportForm(forms.ModelForm):
                                    widget=forms.Textarea(
                                        attrs={
                                         "class": "form-control",
-                                        "id": "titleCommentsControlTextarea1",
+                                        "id": "tags",
                                         "placeholder": "Suggest a change here",
                                         "rows": 5,},
                                                   ),
@@ -209,6 +209,11 @@ class BasicReportForm(forms.ModelForm):
             'references_peer_review',
             'tags_peer_review',
         	]
+    def __init__(self, *args, **kwargs):
+        user = kwargs['initial'].pop('user', None)
+        super(BasicReportForm, self).__init__(*args, **kwargs)
+        self.fields['reviewer'].queryset = get_user_model().objects.all(
+          ).order_by('last_name').exclude(id=user.id)
 
 
 
