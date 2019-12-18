@@ -476,13 +476,14 @@ class BasicReport(models.Model):
         )
 
     def __str__(self):
-        if (self.status.title == "published" or
+        try:
+            if (self.status.title == "published" or
             self.version >= 1):
-            return 'Report-{}-{}'.format(
-                self.id_year, 
-                self.id_number,
-                )
-        else:
+                return 'Report-{}-{}'.format(
+                    self.id_year, 
+                    self.id_number,
+                    )
+        except TypeError:
             return 'Report-{}'.format(self.slug)
 
     def summary_history(self):
