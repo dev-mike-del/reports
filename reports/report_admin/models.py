@@ -26,9 +26,9 @@ def number():
             last_year_entered = (BasicReport.objects.last()
                                 .basic_report_id_year)
             if current_year == last_year_entered:
-                no = BasicReport.objects.select_for_update().aggregate(
-                    models.Max('basic_report_id_number'))
-                no = int(no['basic_report_id_number__max'])+1
+                no = BasicReport.objects.filter(version >= 1).select_for_update().aggregate(
+                    models.Max('id_number'))
+                no = int(no['id_number__max'])+1
                 no_string = str(no).zfill(9)
                 return '{}'.format(no_string)
             else:
@@ -423,13 +423,13 @@ class BasicReport(models.Model):
         related_name="status",
         )
     id_number = models.CharField(
-        default=number, 
-        editable=False, 
+        null=True,
+        editable=True, 
         max_length=10
         )
     id_year = models.PositiveIntegerField(
-        default=current_year, 
-        editable=False
+        null=True,
+        editable=True
         )
     version = models.DecimalField(
         max_digits=5, 
@@ -476,10 +476,14 @@ class BasicReport(models.Model):
         )
 
     def __str__(self):
-        return 'Report-{}-{}'.format(
-            self.id_year, 
-            self.id_number,
-            )
+        if (self.status.title == "published" or
+            self.version >= 1):
+            return 'Report-{}-{}'.format(
+                self.id_year, 
+                self.id_number,
+                )
+        else:
+            return 'Report-{}'.format(self.slug)
 
     def summary_history(self):
         return BasicReportVersion.objects.filter(
@@ -506,24 +510,6 @@ class BasicReport(models.Model):
             self.recommendations_peer_review_response = None
             self.references_peer_review_response = None
             self.tags_peer_review_response = None
-                
-        if self.status.title == 'published':
-            self.title_peer_review = None
-            self.title_peer_review_response = None
-            self.executive_summary_peer_review = None
-            self.executive_summary_peer_review_response = None
-            self.introduction_peer_review = None
-            self.introduction_peer_review_response = None
-            self.body_peer_review = None
-            self.body_peer_review_response = None
-            self.conclusion_peer_review = None
-            self.conclusion_peer_review_response = None
-            self.recommendations_peer_review = None
-            self.recommendations_peer_review_response = None
-            self.references_peer_review = None
-            self.references_peer_review_response = None
-            self.tags_peer_review = None
-            self.tags_peer_review_response = None
 
         current_version = self.version
 
@@ -549,16 +535,35 @@ class BasicReport(models.Model):
             else:
                 self.date_published = timezone.now()
                 self.version = math.ceil(current_version)
+                
+        if self.status.title == 'published':
+            self.title_peer_review = None
+            self.title_peer_review_response = None
+            self.executive_summary_peer_review = None
+            self.executive_summary_peer_review_response = None
+            self.introduction_peer_review = None
+            self.introduction_peer_review_response = None
+            self.body_peer_review = None
+            self.body_peer_review_response = None
+            self.conclusion_peer_review = None
+            self.conclusion_peer_review_response = None
+            self.recommendations_peer_review = None
+            self.recommendations_peer_review_response = None
+            self.references_peer_review = None
+            self.references_peer_review_response = None
+            self.tags_peer_review = None
+            self.tags_peer_review_response = None
 
-        max_length = BasicReport._meta.get_field('slug').max_length
-        self.slug = orig = slugify(self)[:max_length]
+            if self.version == 1:
+                max_length = BasicReport._meta.get_field('slug').max_length
+                self.slug = orig = slugify(self)[:max_length]
 
-        for x in itertools.count(1):
-            if not BasicReport.objects.filter(slug=self.slug).exists():
-                break
-            if BasicReport.objects.filter(slug=self.slug, id=self.id).exists():
-                break
-            self.slug = "%s-%d" % (orig[:max_length - len(str(x)) - 1], x)
+                for x in itertools.count(1):
+                    if not BasicReport.objects.filter(slug=self.slug).exists():
+                        break
+                    if BasicReport.objects.filter(slug=self.slug, id=self.id).exists():
+                        break
+                    self.slug = "%s-%d" % (orig[:max_length - len(str(x)) - 1], x)
       
         super(BasicReport, self).save(*args, **kwargs)
 
