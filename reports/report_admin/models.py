@@ -511,6 +511,9 @@ class BasicReport(models.Model):
             self.recommendations_peer_review = None
             self.references_peer_review = None
             self.tags_peer_review = None
+            if not current_version:
+                current_version = decimal.Decimal(.00)
+            self.version = current_version + decimal.Decimal(.01)
 
         elif self.status.title == 'sent_for_edit':
             self.title_peer_review_response = None
@@ -521,12 +524,6 @@ class BasicReport(models.Model):
             self.recommendations_peer_review_response = None
             self.references_peer_review_response = None
             self.tags_peer_review_response = None
-
-        elif self.status.title == 'sent_for_review':
-            if not current_version:
-                current_version = decimal.Decimal(.00)
-
-            self.version = current_version + decimal.Decimal(.01)
 
         elif self.status.title == 'published':
             self.title_peer_review = None

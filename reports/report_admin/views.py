@@ -136,9 +136,6 @@ class ReportPreviewView(
         if self.request.user == report.reviewer:
             if report.status == sent_for_review:
                 report.status = review
-        elif self.request.user == report.author:
-            if report.status == published:
-                report.status = confirm
         report.save()
         return kwargs
 
@@ -150,6 +147,9 @@ class ReportPreviewView(
             ).order_by('-version')
         context['report_tags'] = context['object'].tags_as_string.split(",")
         if self.request.user == context['object'].author:
+            if context['object'].status == published:
+                context['object'].status = confirm
+                context['object'].save()
             return context
         elif self.request.user == context['object'].reviewer:
             return context
