@@ -108,6 +108,26 @@
                           <td colspan="2">Modified</td>
                           <td colspan="2">{{ report.date_modified }}</td>
                         </tr>
+                        {% if report.author == request.user %}
+                          <tr>
+                            <td colspan="2">FIX A TYPO</td>
+                            <td colspan="2">
+                              <input name="make_comments" type="submit" value=" TYPO " class="btn btn-secondary">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colspan="2">UPDATE CONTENT</td>
+                            <td colspan="2">
+                              <input name="make_comments" type="submit" value="UPDATE" class="btn btn-warning">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colspan="2">ARCHIVE</td>
+                            <td colspan="2">
+                              <input name="make_comments" type="submit" value="ARCHIVE" class="btn btn-danger">
+                            </td>
+                          </tr>
+                        {% endif %}
                       </tbody>
                     </table>
                   </div>
