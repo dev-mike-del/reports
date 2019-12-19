@@ -12,6 +12,15 @@
 {% block title %} {{ block.super }} Reports {% endblock %}
 
 {% block content %}
+    <!-- message bar -->
+  {% if messages %}
+    {% for message in messages %}
+      <div id=messageBar>
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+  
     <!-- All the cards on the page will be in this 'row', so they'll have to be inside this div -->
     <div class="infinite-container row">
 
@@ -110,21 +119,13 @@
                         </tr>
                         {% if report.author == request.user %}
                           <tr>
-                            <td colspan="2">FIX A TYPO</td>
+                            <td colspan="2">Recall</td>
                             <td colspan="2">
-                              <input name="make_comments" type="submit" value=" TYPO " class="btn btn-secondary">
-                            </td>
-                          </tr>
-                          <tr>
-                            <td colspan="2">UPDATE CONTENT</td>
-                            <td colspan="2">
-                              <input name="make_comments" type="submit" value="UPDATE" class="btn btn-warning">
-                            </td>
-                          </tr>
-                          <tr>
-                            <td colspan="2">ARCHIVE</td>
-                            <td colspan="2">
-                              <input name="make_comments" type="submit" value="ARCHIVE" class="btn btn-danger">
+                              <a href="{% url 'report_admin:preview' slug=report.slug %}">
+                                <button class="btn btn-secondary">
+                                  RECALL
+                                </button>
+                              </a>
                             </td>
                           </tr>
                         {% endif %}

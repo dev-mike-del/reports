@@ -455,6 +455,10 @@ class BasicReport(models.Model):
         default=False, 
         blank=True,
         )
+    cancel_recall = models.BooleanField(
+        default=False, 
+        blank=True,
+        )
     date_created = models.DateTimeField(
         auto_now_add=True,
         )
@@ -497,6 +501,7 @@ class BasicReport(models.Model):
             ).order_by('-version')
 
     def save(self, *args, **kwargs):
+        current_version = self.version
         if self.status.title == 'sent_for_review':
             self.title_peer_review = None
             self.executive_summary_peer_review = None
@@ -507,7 +512,7 @@ class BasicReport(models.Model):
             self.references_peer_review = None
             self.tags_peer_review = None
 
-        if self.status.title == 'sent_for_edit':
+        elif self.status.title == 'sent_for_edit':
             self.title_peer_review_response = None
             self.executive_summary_peer_review_response = None
             self.introduction_peer_review_response = None
@@ -517,32 +522,13 @@ class BasicReport(models.Model):
             self.references_peer_review_response = None
             self.tags_peer_review_response = None
 
-        current_version = self.version
-
-        if (
-            self.status.title == 'sent_for_review' or
-            self.status.title == 'typo_sent_for_review'
-            ):
+        elif self.status.title == 'sent_for_review':
             if not current_version:
                 current_version = decimal.Decimal(.00)
 
             self.version = current_version + decimal.Decimal(.01)
 
         elif self.status.title == 'published':
-            if self.date_published:
-                self.typo_update = False
-                self.update = False
-                self.update_comment = None
-
-                if self.typo_update:
-                    self.version = math.floor(current_version)
-                else:
-                    self.version = math.ceil(current_version)
-            else:
-                self.date_published = timezone.now()
-                self.version = math.ceil(current_version)
-                
-        if self.status.title == 'published':
             self.title_peer_review = None
             self.title_peer_review_response = None
             self.executive_summary_peer_review = None
@@ -559,22 +545,35 @@ class BasicReport(models.Model):
             self.references_peer_review_response = None
             self.tags_peer_review = None
             self.tags_peer_review_response = None
+            if self.date_published:
+                if (self.typo_update or
+                    self.cancel_recall):
+                    self.version = math.floor(current_version)
+                else:
+                    self.version = math.ceil(current_version)
+                self.typo_update = False
+                self.update = False
+                self.update_comment = None
+                self.cancel_recall = False
+            else:
+                self.date_published = timezone.now()
+                self.version = math.ceil(current_version)
+    
+                year = current_year()
+                num = number()
+                self.id_year = year
+                self.id_number = num
 
-            year = current_year()
-            num = number()
-            self.id_year = year
-            self.id_number = num
+                if self.version == 1:
+                    max_length = BasicReport._meta.get_field('slug').max_length
+                    self.slug = orig = slugify(self)[:max_length]
 
-            if self.version == 1:
-                max_length = BasicReport._meta.get_field('slug').max_length
-                self.slug = orig = slugify(self)[:max_length]
-
-                for x in itertools.count(1):
-                    if not BasicReport.objects.filter(slug=self.slug).exists():
-                        break
-                    if BasicReport.objects.filter(slug=self.slug, id=self.id).exists():
-                        break
-                    self.slug = "%s-%d" % (orig[:max_length - len(str(x)) - 1], x)
+                    for x in itertools.count(1):
+                        if not BasicReport.objects.filter(slug=self.slug).exists():
+                            break
+                        if BasicReport.objects.filter(slug=self.slug, id=self.id).exists():
+                            break
+                        self.slug = "%s-%d" % (orig[:max_length - len(str(x)) - 1], x)
       
         super(BasicReport, self).save(*args, **kwargs)
 

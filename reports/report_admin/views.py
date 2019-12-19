@@ -3,7 +3,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from django.views.generic import CreateView, UpdateView, DetailView, ListView
+from django.views.generic import (
+    CreateView, UpdateView, DetailView, ListView, FormView
+    )
 
 from report_admin.forms import BasicReportForm, BasicReportCommentForm
 from report_admin.models import BasicReport, BasicReportVersion
@@ -19,6 +21,7 @@ sent_for_edit, created = Status.objects.get_or_create(title="sent_for_edit")
 review, created = Status.objects.get_or_create(title="review")
 published, created = Status.objects.get_or_create(title="published")
 archived, created = Status.objects.get_or_create(title="archived")
+confirm, created = Status.objects.get_or_create(title="confirm")
 
 
 class ReportCreateView(
@@ -76,7 +79,8 @@ class ReportUpdateView(
             BasicReport, id=kwargs['instance'].pk)
         if self.request.user == report.author:
             if (report.status == sent_for_edit or
-                report.status == sent_for_review):
+                report.status == sent_for_review or
+                report.status == confirm):
                 report.status = edit
             report.save()
         return kwargs
@@ -132,7 +136,10 @@ class ReportPreviewView(
         if self.request.user == report.reviewer:
             if report.status == sent_for_review:
                 report.status = review
-            report.save()
+        elif self.request.user == report.author:
+            if report.status == published:
+                report.status = confirm
+        report.save()
         return kwargs
 
     def get_context_data(self, **kwargs):
@@ -150,7 +157,6 @@ class ReportPreviewView(
             return None
 
     def render_to_response(self, context, **response_kwargs):
-        print("I'm in the render_to_response function")
         report = get_object_or_404(BasicReport, id=context['object'].id)
         if context is None:
             if report.reviewer == self.request.user:
@@ -162,7 +168,6 @@ class ReportPreviewView(
             self).render_to_response(context,**response_kwargs)
 
     def form_valid(self, form):
-        print("I'm in the form_valid function")
         report = form.save(commit=False)
 
         if "edit" in self.request.POST:
@@ -181,10 +186,32 @@ class ReportPreviewView(
                 )
             return HttpResponseRedirect(reverse('accounts:profile'))
 
-        if "make_comments" in self.request.POST:
+        if "typo" in self.request.POST:
+            report.typo_update = True
+            report.save()
+            return HttpResponseRedirect(
+                reverse('report_admin:update',
+                    kwargs={'slug': report.slug}))
+
+        if "update" in self.request.POST:
+            report.update = True
+            report.save()
+            return HttpResponseRedirect(
+                reverse('report_admin:update',
+                    kwargs={'slug': report.slug}))
+
+        if "cancel" in self.request.POST:
+            report.cancel_recall = True
+            report.status = published
+            report.save()
+            messages.success(
+                self.request,
+                "You have canceled the recall of {}".format(
+                                    self.object
+                                    )
+                )
             return HttpResponseRedirect(reverse(
-                                        'report_admin:comment',
-                                        kwargs={'slug': report.slug})
+                                        'list',)
                                         )
 
         if "publish" in self.request.POST:
