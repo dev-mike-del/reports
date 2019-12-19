@@ -7,7 +7,11 @@ from django.views.generic import (
     CreateView, UpdateView, DetailView, ListView, FormView
     )
 
-from report_admin.forms import BasicReportForm, BasicReportCommentForm
+from report_admin.forms import (
+    BasicReportForm, 
+    BasicReportCommentForm, 
+    ReportSearchForm,
+    )
 from report_admin.models import BasicReport, BasicReportVersion
 
 from status.models import Status
@@ -329,3 +333,243 @@ class ReportDetailView(DetailView):
     def get_queryset(self):
         return self.model.objects.filter(status__title='published'
             ).all()
+
+
+class ReportSearchView(ListView, FormView):
+    context_object_name = 'reports'
+    model = BasicReport
+    form_class = ReportSearchForm
+    template_name = 'report_admin/basicreport_search.html'
+    paginate_by = 20
+
+    def get_initial(self):
+        """
+        Returns the initial data to use for forms on this view.
+        """
+        initial = super(ReportSearchView, self).get_initial()
+        initial['search'] = self.request.GET.get('search')
+        initial['from_date'] = self.request.GET.get('from_date')
+        initial['to_date'] = self.request.GET.get('to_date')
+        initial['tag'] = self.request.GET.get('tag')
+        return initial
+
+    def get_queryset(self):
+        object_list = ""
+
+        try:
+            search = self.request.GET.get('search')
+
+        except:
+            search = ""
+
+        try:
+            from_date = self.request.GET.get('from_date')
+            from_date = datetime.datetime.strptime(str(from_date), "%m/%d/%Y").date()
+
+        except:
+            from_date = None
+
+        try:
+            to_date = self.request.GET.get('to_date')
+            to_date = datetime.datetime.strptime(str(to_date), "%m/%d/%Y").date()
+
+        except:
+            to_date = None 
+
+        try:
+            tag = self.request.GET.get('tag')
+            tag = get_object_or_404(Tag, title=tag)
+        except:
+            tag = ""
+
+        try:
+            if (search != '' or 
+                from_date != None or 
+                to_date != None or 
+                tag != ""):
+
+                if (search != '' and 
+                    from_date != None and 
+                    to_date != None and 
+                    tag != ''):
+                    reports = self.model.objects.annotate(search=SearchVector(
+                        'title', 
+                        'executive_summary', 
+                        'body', 
+                        'conclusion', 
+                        'recommendations', 
+                        'references',
+                        ),).filter(
+                            Q(status=published),
+                            Q(date_published__range=(from_date, to_date)),
+                            Q(tags=tag),
+                            Q(search=search)
+                            ).all().order_by(
+                                '-date_published'
+                                )
+
+                elif (search != '' and 
+                    from_date != None and 
+                    to_date != None ):
+                    reports = self.model.objects.annotate(search=SearchVector(
+                        'title', 
+                        'executive_summary', 
+                        'body', 
+                        'conclusion', 
+                        'recommendations', 
+                        'references',
+                        ),).filter(
+                            Q(status=published),
+                            Q(date_published__range=(from_date, to_date)),
+                            Q(search=search)
+                            ).all().order_by(
+                                '-date_published'
+                                )
+
+                elif search != '':
+                    reports = self.model.objects.annotate(search=SearchVector(
+                        'title', 
+                        'executive_summary', 
+                        'body', 
+                        'conclusion', 
+                        'recommendations', 
+                        'references',
+                        ),).filter(
+                            Q(status=published),
+                            Q(search=search)
+                            ).all().order_by(
+                                '-date_published'
+                                )
+                       
+                elif (search != '' and 
+                    from_date != None and 
+                    tag != ''):
+                    reports = self.model.objects.annotate(search=SearchVector(
+                        'title', 
+                        'executive_summary', 
+                        'body', 
+                        'conclusion', 
+                        'recommendations', 
+                        'references',
+                        ),).filter(
+                            Q(status=published),
+                            Q(date_published__gte=from_date),
+                            Q(tags=tag),
+                            Q(search=search)
+                            ).all().order_by(
+                                '-date_published'
+                                )
+ 
+                elif (search != '' and 
+                    from_date != None):
+                    reports = self.model.objects.annotate(search=SearchVector(
+                        'title', 
+                        'executive_summary', 
+                        'body', 
+                        'conclusion', 
+                        'recommendations', 
+                        'references',
+                        ),).filter(
+                            Q(status=published),
+                            Q(date_published__gte=from_date),
+                            Q(search=search)
+                            ).all().order_by(
+                                '-date_published'
+                                )
+
+                elif (search != '' and 
+                    to_date != None and 
+                    tag != ''):
+                    reports = self.model.objects.annotate(search=SearchVector(
+                        'title', 
+                        'executive_summary', 
+                        'body', 
+                        'conclusion', 
+                        'recommendations', 
+                        'references',
+                        ),).filter(
+                            Q(status=published),
+                            Q(date_published__lte=to_date),
+                            Q(tags=tag),
+                            Q(search=search)
+                            ).all().order_by(
+                                '-date_published'
+                                )
+
+                elif (search != '' and 
+                    to_date != None):
+                    reports = self.model.objects.annotate(search=SearchVector(
+                        'title', 
+                        'executive_summary', 
+                        'body', 
+                        'conclusion', 
+                        'recommendations', 
+                        'references',
+                        ),).filter(
+                            Q(status=published),
+                            Q(date_published__lte=to_date),
+                            Q(search=search)
+                            ).all().order_by(
+                                '-date_published'
+                                )
+
+                elif (tag != '' and 
+                    from_date != None and 
+                    to_date != None):
+                    reports = self.model.objects.filter(
+                        Q(status=published),
+                        Q(threat_level=threat_level),
+                        Q(date_published__range=(from_date, to_date)),
+                        Q(tags=tag)).all().order_by('-date_published')
+
+                elif (tag != '' and
+                    from_date != None):
+                    reports = self.model.objects.filter(
+                        Q(status=published),
+                        Q(date_published__gte=from_date),
+                        Q(tags=tag)).all().order_by('-date_published')
+
+                elif (tag != '' and 
+                    to_date != None):
+                    reports = self.model.objects.filter(
+                        Q(status=published),
+                        Q(date_published__lte=to_date),
+                        Q(tags=tag)).all().order_by('-date_published')
+
+                elif (tag != ''):
+                    reports = self.model.objects.filter(
+                        Q(status=published)
+                        ,Q(tags=tag)).all().order_by('-date_published')
+
+                elif (search != ''):
+                    threats = self.model.objects.annotate(search=SearchVector(
+                        'title', 
+                        'executive_summary', 
+                        'body', 
+                        'conclusion', 
+                        'recommendations', 
+                        'references',
+                        ),).filter(
+                            Q(status=published),
+                            Q(search=search)
+                            ).all().order_by('-date_published')
+
+                else:
+                    object_list = None
+
+                try:
+                    reports
+                except NameError:
+                    reports_exists = False
+                else:
+                    reports_exists = True
+
+                if reports_exists:
+                    object_list = reports
+
+
+                return object_list
+
+
+        except Exception as e:
+            raise e

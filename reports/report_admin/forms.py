@@ -217,7 +217,6 @@ class BasicReportForm(forms.ModelForm):
           ).order_by('last_name').exclude(id=user.id)
 
 
-
 class BasicReportCommentForm(forms.ModelForm):
     class Meta:
         model = BasicReport
@@ -231,3 +230,41 @@ class BasicReportCommentForm(forms.ModelForm):
             'references_peer_review',
             'tags_peer_review',
             ]
+
+
+class ReportSearchForm(forms.Form):
+    search = forms.CharField(widget=forms.TextInput(attrs=
+                                {
+                                    "class":"",
+                                    "id":"search",
+                                    "name":"search",
+                                }),
+                                required=False,)
+
+    from_date = forms.DateField(widget=forms.TextInput(attrs=
+                                {
+                                    "class":"datepicker form-control form-control-sm mb-2",
+                                    "id":"from",
+                                    "name":"from",
+                                    "placeholder":"from",
+                                }),
+                                required=False,)
+
+    to_date = forms.DateField(widget=forms.TextInput(attrs=
+                                {
+                                    "class":"datepicker form-control form-control-sm mb-0",
+                                    "id":"to",
+                                    "name":"to",
+                                    "placeholder":"to",
+                                }),
+                                required=False,)
+
+    tag = forms.CharField(max_length=250,
+                                   widget=forms.Textarea(
+                                       attrs={
+                                        "class": "form-control",
+                                        "id": "titleCommentsControlTextarea1",
+                                        "placeholder": "Suggest a change here",
+                                        "rows": 5,},
+                                                  ),
+                                   required=False,)
