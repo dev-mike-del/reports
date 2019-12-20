@@ -16,17 +16,22 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from report_admin.views import ReportListView, ReportDetailView
+from report_admin.views import (
+    ReportListView, 
+    ReportDetailView, 
+    ReportSearchView,
+    )
+
 
 urlpatterns = [
     path('', 
         ReportListView.as_view(), 
-        name='list'
+        name='list',
         ),
 
     path('<slug>', 
         ReportDetailView.as_view(), 
-        name='detail'
+        name='detail',
         ),
 
     path('accounts/', include(
@@ -41,5 +46,10 @@ urlpatterns = [
             'report_admin.urls', 
             namespace='report_admin',
             )
+        ),
+
+    path('search/',
+        ReportSearchView.as_view(),
+        name='search',
         ),
 ]

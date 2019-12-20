@@ -1,0 +1,170 @@
+{% extends 'project_base/base.html' %}
+{% load static %}
+
+{% block css %}
+{{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/list.css' %}">
+  <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,900|Oswald:300,400,700" rel="stylesheet">
+{% endblock css %}
+
+
+{% block title %} {{ block.super }} Reports {% endblock %}
+
+{% block content %}
+
+    <div class="row">
+
+      <!-- Search Filter sidebar -->
+      <div class="col-lg-3 d-flex flex-column refine">
+
+        <!-- Date Range Filter -->
+        <div class="filterHeader" >
+          <h4>Refine your results</h4>
+        </div>
+
+        <form class="d-flex flex-column refine" method="GET">
+
+          <h6 >date</h6>
+          <div hidden>{{ form.search }}</div>
+          <div class="form-group" >
+
+            {{ form.from_date }}
+
+            {{ form.to_date }}
+
+          </div>
+
+          {% if user_is_executive %}
+          <div class="form-group">
+            <h6>Type</h6>
+            {{ form.search_type }}
+          </div>
+          {% endif %}
+
+          <div class="form-group" >
+            <h6>threat level</h6>
+              {{ form.threat_level }}
+          </div>
+
+          <div class="form-group" hidden>
+            <h6>tag</h6>
+              {{ form.tag }}
+          </div>
+
+
+          <!-- <button type="button" class="btn btn-sm btn-outline-secondary mb-4" >Filter</button> -->
+          <input type="submit" class="btn btn-sm btn-outline-secondary mb-4" value="Filter">
+
+        </form>
+
+        <!-- Trending Tags / tags area -->
+          <h6 hidden>Trending Tags</h6>
+          <div class="trendTagArea" hidden>
+            <a href="#" class="trendTag">Ransomware</a>
+            <a href="#" class="trendTag">Locky</a>
+            <a href="#" class="trendTag">Adobe</a>
+            <a href="#" class="trendTag">PHP</a>
+            <a href="#" class="trendTag">Kaspersky</a>
+            <a href="#" class="trendTag">SAP</a>
+            <a href="#" class="trendTag">Adobe Acrobat</a>
+          </div>
+
+        <!-- Makes a small break happen on tablets and smaller -->
+        <br class="d-md-none">
+
+      </div>
+
+      <!-- empty 1-column div -->
+      <div class="col-lg-1">
+      </div>
+      <div class="col-lg-8">
+
+        {% if object_list %}
+          {% if form.search.value %}
+            <h3 class="searchHeader">{{ object_list|length }} search result{{ object_list|length|pluralize }} for "{{ form.search.value }}"</h3>
+          {% else %}
+            {% if form.tag.value %}
+            <h3 class="searchHeader">{{ object_list|length }} result{{ object_list|length|pluralize }} for "{{ form.tag.value }}"</h3>
+            {% endif %}
+          {% endif %}
+        {% else %}
+          <h3 class="searchHeader">No search results</h3>
+        {% endif %}
+
+        <!-- horizontal rule -->
+
+
+
+        <form class="form-inline" hidden>
+          <select class="form-control form-control-sm" id="inlineFormCustomSelectPref">
+            <option selected>Most Recent </option>
+            <option value="1">Oldest</option>
+          </select>
+        </form>
+
+        {% for object in object_list %}
+        <!-- individual entry -->
+        <div class="searchResult">
+          <div class="nikeID">{{ object }}</div>
+
+          {% if object.threat_level.title == "Awareness" %}
+            <div class="Awareness">{{ object.threat_level }}</div>
+            {% elif  object.threat_level.title == "Caution" %}
+            <div class="Caution">{{ object.threat_level }}</div>
+            {% elif  object.threat_level.title == "Attention" %}
+            <div class="Attention">{{ object.threat_level }}</div>
+          {% endif %}
+
+          {% if object.eb_slug %}
+            <h2><a href="{% url 'executive_briefs:EB_detail_view' eb_slug=object.eb_slug %}" class="search-card-title">{{ object.title }}</a></h2>
+          {% else %}
+            <h2><a href="{% url 'threats:detail' pk=object.pk %}" class="search-card-title">{{ object.title }}</a></h2>
+          {% endif %}
+
+          <div class="day_date">{{ object.date_published }}</div>
+
+          {% if object.executive_summary %}
+            <div class="searchLink">{{ object.executive_summary|safe|truncatechars_html:180 }}</div>
+          {% else %}
+            <div class="searchLink">{{ object.implications|safe|truncatechars_html:180 }}</div>
+          {% endif %}
+
+
+          {% if object.tags_str %}
+            <div class="resultsTagArea">
+              <h4>tags:</h4>
+                {% for tag in object.tags_as_list %}
+
+                <a href="search?tag={{ tag|urlencode }}" class="cardTag">{{ tag }}</a>
+
+                {% endfor %}
+            </div>
+          {% endif %}
+          
+        </div>
+        {% endfor %}
+
+        <!-- end of middle column -->
+      </div>
+
+      <!-- end of row -->
+      </div>
+
+
+{% endblock content %}
+
+{% block javascript %}
+  {{ block.super }}
+
+  <script>
+    Waypoint.offsetAliases['500-past-bottom'] = function() {
+      return this.context.innerHeight() - this.adapter.outerHeight() + 500
+    }
+    new Waypoint.Infinite({
+      element: $('.infinite-container')[0],
+      offset: '500-past-bottom'
+    })
+  </script>
+
+{% endblock javascript %}
