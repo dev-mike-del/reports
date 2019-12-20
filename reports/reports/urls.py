@@ -29,11 +29,6 @@ urlpatterns = [
         name='list',
         ),
 
-    path('<slug>', 
-        ReportDetailView.as_view(), 
-        name='detail',
-        ),
-
     path('accounts/', include(
             'accounts.urls', 
             namespace='accounts',
@@ -48,8 +43,14 @@ urlpatterns = [
             )
         ),
 
-    path('search/',
+    path('search',
         ReportSearchView.as_view(),
         name='search',
         ),
+
+    path('<slug>', 
+        ReportDetailView.as_view(), 
+        name='detail',
+        ),
+
 ]
