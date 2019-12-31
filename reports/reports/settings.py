@@ -25,7 +25,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if 'RDS_DB_NAME' in os.environ:
+    DEBUG = False
+else:
+    DEBUG = True
 
 ALLOWED_HOSTS = ['reports-env.55kcu7mxm7.us-west-2.elasticbeanstalk.com',
                 'www.reports-env.55kcu7mxm7.us-west-2.elasticbeanstalk.com',
