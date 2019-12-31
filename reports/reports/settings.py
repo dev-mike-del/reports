@@ -30,10 +30,12 @@ if 'RDS_DB_NAME' in os.environ:
 else:
     DEBUG = True
 
-ALLOWED_HOSTS = ['reports-env.55kcu7mxm7.us-west-2.elasticbeanstalk.com',
-                'www.reports-env.55kcu7mxm7.us-west-2.elasticbeanstalk.com',
-                'thereportplatform.com', 'www.thereportplatform.com', ]
-
+if 'RDS_DB_NAME' in os.environ:
+    ALLOWED_HOSTS = ['reports-env.55kcu7mxm7.us-west-2.elasticbeanstalk.com',
+                    'www.reports-env.55kcu7mxm7.us-west-2.elasticbeanstalk.com',
+                    'thereportplatform.com', 'www.thereportplatform.com', ]
+else:
+    ALLOWED_HOSTS = ['127.0.0.1', ]
 
 # Application definition
 
