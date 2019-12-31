@@ -148,8 +148,12 @@ AUTH_USER_MODEL = 'users.User'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 STATIC_URL = '/static/'
-# STATIC_ROOT = "/home/m/reports/static"
-STATIC_ROOT = os.path.join(BASE_DIR, "www", "static")
+
+if 'RDS_DB_NAME' in os.environ:
+    STATIC_ROOT = os.path.join(BASE_DIR, "www", "static")
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+else:
+    STATIC_ROOT = "/home/m/reports/static"
 
 AWS_S3_OBJECT_PARAMETERS = {
     'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
@@ -168,4 +172,4 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
 # Tell the staticfiles app to use S3Boto3 storage when writing the collected static files (when
 # you run `collectstatic`).
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
