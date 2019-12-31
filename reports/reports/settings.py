@@ -27,7 +27,7 @@ SECRET_KEY = SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['reports-env.55kcu7mxm7.us-west-2.elasticbeanstalk.com', ]
+ALLOWED_HOSTS = ['www.reports-env.55kcu7mxm7.us-west-2.elasticbeanstalk.com', ]
 
 
 # Application definition
@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'reports.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-if 'RDS_HOSTNAME' in os.environ:
+if 'RDS_DB_NAME' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -94,14 +94,13 @@ if 'RDS_HOSTNAME' in os.environ:
             'PORT': os.environ['RDS_PORT'],
         }
     }
-# else:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#         }
-#     }
-
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -150,10 +149,10 @@ AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=94608000',
 }
 
-AWS_STORAGE_BUCKET_NAME = 'reports.static.and.media'
+AWS_STORAGE_BUCKET_NAME = 'reportss3'
 AWS_S3_REGION_NAME = 'us-west-2'  # e.g. us-east-2
-AWS_ACCESS_KEY_ID = 'AKIAWS5NX6G6C2OQAI73'
-AWS_SECRET_ACCESS_KEY = 'Ne2U2wdi9QETF17RSUOKb1nEu4FzH/82zuSfdxfM'
+AWS_ACCESS_KEY_ID = 'AKIAWS5NX6G6HTHG3R6S'
+AWS_SECRET_ACCESS_KEY = 'eqwiNUwsvXZO0n7xIBIf4M5Lm/i2XY6m+iOOlF7j'
 
 # Tell django-storages the domain to use to refer to static files.
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
