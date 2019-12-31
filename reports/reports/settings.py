@@ -27,7 +27,7 @@ SECRET_KEY = SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['reports-env.55kcu7mxm7.us-west-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['reports-env.55kcu7mxm7.us-west-2.elasticbeanstalk.com', ]
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     'ckeditor',
     'users',
     'registration',
@@ -85,7 +86,7 @@ WSGI_APPLICATION = 'reports.wsgi.application'
 if 'RDS_HOSTNAME' in os.environ:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': os.environ['RDS_DB_NAME'],
             'USER': os.environ['RDS_USERNAME'],
             'PASSWORD': os.environ['RDS_PASSWORD'],
@@ -141,5 +142,22 @@ AUTH_USER_MODEL = 'users.User'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 STATIC_URL = '/static/'
-STATIC_ROOT = "/home/m/reports/static"
+# STATIC_ROOT = "/home/m/reports/static"
+STATIC_ROOT = os.path.join(BASE_DIR, "www", "static")
 
+AWS_S3_OBJECT_PARAMETERS = {
+    'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+    'CacheControl': 'max-age=94608000',
+}
+
+AWS_STORAGE_BUCKET_NAME = 'reports.static.and.media'
+AWS_S3_REGION_NAME = 'us-west-2'  # e.g. us-east-2
+AWS_ACCESS_KEY_ID = 'AKIAWS5NX6G6C2OQAI73'
+AWS_SECRET_ACCESS_KEY = 'Ne2U2wdi9QETF17RSUOKb1nEu4FzH/82zuSfdxfM'
+
+# Tell django-storages the domain to use to refer to static files.
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+# Tell the staticfiles app to use S3Boto3 storage when writing the collected static files (when
+# you run `collectstatic`).
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
