@@ -27,8 +27,9 @@ SECRET_KEY = SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.reports-env.55kcu7mxm7.us-west-2.elasticbeanstalk.com',
-                'thereportplatform.com', ]
+ALLOWED_HOSTS = ['reports-env.55kcu7mxm7.us-west-2.elasticbeanstalk.com',
+                'www.reports-env.55kcu7mxm7.us-west-2.elasticbeanstalk.com',
+                'thereportplatform.com', 'www.thereportplatform.com', ]
 
 
 # Application definition
