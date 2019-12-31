@@ -161,6 +161,8 @@ AWS_S3_REGION_NAME = 'us-west-2'  # e.g. us-east-2
 AWS_ACCESS_KEY_ID = 'AKIAWS5NX6G6HTHG3R6S'
 AWS_SECRET_ACCESS_KEY = 'eqwiNUwsvXZO0n7xIBIf4M5Lm/i2XY6m+iOOlF7j'
 
+AWS_DEFAULT_ACL = None
+
 # Tell django-storages the domain to use to refer to static files.
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
