@@ -11,6 +11,11 @@
 	padding-top: 5.6rem;
 }
 
+#logo {
+	height: 3rem;
+	width: 3rem;
+}
+
 h1.homeHeader{
 	text-align: center;
 	color: #f7f7f7;
