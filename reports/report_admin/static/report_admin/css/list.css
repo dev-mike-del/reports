@@ -313,8 +313,8 @@ text-transform: uppercase;
 .gradient-strip {
   width: 100%;
   height: 6px;
-  background-image: -webkit-linear-gradient(0deg, #8feef6, #cc96f6);
-  background-image: linear-gradient(90deg, #8feef6, #cc96f6);
+  background-image: -webkit-linear-gradient(0deg, #5880ad, #5b81af);
+  background-image: linear-gradient(90deg, #5880ad, #5b81af);
 	margin-bottom: 1rem;
 }
 
