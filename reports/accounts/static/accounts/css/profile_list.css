@@ -6,6 +6,11 @@ body {
     background-repeat: repeat-y repeat-x;
 }
 
+.btn-primary, .btn-info {
+    background-color: #768db5;
+    color: white;
+}
+
 #messageBar {
   padding-top: .4rem;
 	width: 100%;

@@ -1,10 +1,6 @@
 {% extends 'accounts/profile_in_edit_card.html' %}
 {% load static %}
 
-{% block css %}
-  <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/profile_list.css' %}">
-{% endblock css %}
-
 {% block new_reports_in_edit_card %}
   <div class="sentForReviewColumn">
     {% if new_reports_in_edit %}
