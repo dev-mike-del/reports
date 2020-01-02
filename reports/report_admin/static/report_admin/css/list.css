@@ -604,7 +604,7 @@ h4 {
 
 .btn-primary:hover, .btn-info:hover {
 	text-decoration: none;
-	background: transparent;
+	/*background: transparent;*/
 	color: inherit;
 	-webkit-transition: background linear 350ms;
 	border-color: #ddd;

@@ -47,3 +47,8 @@
 .tag-editor>li {
     text-transform: uppercase;
 }
+
+.btn-primary, .btn-info, .btn-info:hover {
+    background-color: #768db5;
+    color: white;
+}s

@@ -4,6 +4,7 @@
 {% block css %}
 {{ block.super }}
   <link href="{% static 'report_admin/css/jquery.tag-editor.css' %}" rel="stylesheet" type="text/css" media="all">
+  <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/list.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/preview.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/form.css' %}">
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,900|Oswald:300,400,700" rel="stylesheet">
@@ -300,7 +301,7 @@
           <!-- <div class="form-group row"> -->
             <div class="d-flex justify-content-end flex-wrap">
               <div class="saveBtn">
-                <input name="save_report" type="submit" value="Save" class="btn btn-outline-secondary btn-md mr-4">
+                <input name="save_report" type="submit" value="Save" class="btn btn-info btn-md mr-4">
               </div>
               <div class="SavePreviewBtn">
                 <input name="preview_report" type="submit" value="Preview" class="btn btn-info btn-md">
