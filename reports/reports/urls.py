@@ -20,6 +20,7 @@ from report_admin.views import (
     ReportListView, 
     ReportDetailView, 
     ReportSearchView,
+    AboutView,
     )
 
 
@@ -27,6 +28,11 @@ urlpatterns = [
     path('', 
         ReportListView.as_view(), 
         name='list',
+        ),
+
+    path('about',
+        AboutView.as_view(),
+        name='about',
         ),
 
     path('accounts/', include(

@@ -6,7 +6,12 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.generic import (
-    CreateView, UpdateView, DetailView, ListView, FormView
+    CreateView, 
+    UpdateView, 
+    DetailView, 
+    ListView, 
+    FormView,
+    TemplateView
     )
 
 from report_admin.forms import (
@@ -575,3 +580,7 @@ class ReportSearchView(ListView, FormView):
 
         except Exception as e:
             raise e
+
+
+class AboutView(TemplateView):
+    template_name = 'report_admin/basicreport_about.html'

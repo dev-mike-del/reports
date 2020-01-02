@@ -1,0 +1,102 @@
+{% extends 'project_base/base.html' %}
+{% load static %}
+
+{% block css %}
+{{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/list.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/about.css' %}">
+  <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,900|Oswald:300,400,700" rel="stylesheet">
+{% endblock css %}
+
+
+{% block title %} {{ block.super }} Reports {% endblock %}
+
+{% block content %}
+<div class="row">
+      <div class="col-lg-3">
+      </div>
+      <div class="col-lg-6">
+        <div class="aboutCopy">
+
+          <h5>Mission</h5>
+          <div class="missionStatement">
+            To provide a fluid process for producing well researched, peer reviewed reports through a custom publishing workflow.   
+          </div>
+          <p class="aboutText">
+          This platform provides an innovative report publishing application that leveraged the power and accuracy of the academic peer review process. Anyone can create an account and immediately author a report. The author must select a peer reviewer. The reviewer is responsible for suggesting changes and ultimately publishing the report.
+          </p>
+          <p class="aboutText">
+          A published report will be visible and accessible on the platform's home page. It can be retracted by the report's author or peer reviewer. The retracted report can then either be deleted or updated and re-published.
+          </p>
+
+          <h5>Features</h5>
+          <div class="row aboutText">
+            <div class="col-md-6">
+              <div class="aboutWorkIcons">
+                <img src="{% static 'report_admin/img/admin.png' %}" alt="admin icon" class="about_images" id="about_admin_image">
+              </div>
+              <div class="aboutWorkHeader">ADMIN</div>
+              <p>
+              	Dashboard displays all reports connected to a user (author or reviewer)
+              </p>
+            </div>
+
+            <div class="col-md-6">
+              <div class="aboutWorkIcons">
+                <img src="{% static 'project_base/img/mag_glass.svg' %}" alt="search icon" class="about_images">
+              </div>
+              <div class="aboutWorkHeader">SEARCH</div>
+              <p>
+              	Custom search with keyword(s), tags and/or date range. Makes use of Django/Postgres SearchVector
+              </p>
+            </div>
+
+            <div class="col-md-6">
+              <div class="aboutWorkIcons">
+                <img src="{% static 'report_admin/img/tags.png' %}" alt="tags icon" class="about_images">
+              </div>
+              <div class="aboutWorkHeader">TAGS</div>
+              <p>
+              	Authors can attach keyword tags to a report. Other users can search via tags and view all reports grouped by the selected tag.
+              </p>
+            </div>
+
+            <div class="col-md-6">
+              <div class="aboutWorkIcons">
+                <img src="{% static 'report_admin/img/subscriptions.png' %}" alt="subscription icon" class="about_images">
+              </div>
+              <h6 class="aboutWorkHeader">SUBSCRIPTION</h6>
+              <p>
+              Registered users can subscribe to tags and receive an email whenever a new report (with that tag) is published.
+              </p>
+            </div>
+
+          <!-- End row "abouttext" -->
+          </div>
+
+          <h5>Creator: Michael Delgado</h5>
+          <p class="aboutText">
+          I'm a senior software engineer with extensive experience in creating secure applications and web services. I designed and created a custom reporting platform for Nike and worked exclusively with their top intelligence specialists. Their platform has been in production for nearly three years and has received high praises from executives and regular users.  
+          </p>
+
+          <h5>Business</h5>
+          <p class="aboutText">
+          	If you are interested in a custom business or social media platform, please contact me today.
+          </p>
+			<div class="col-md-6">
+				<div class="aboutWorkHeader"><a href="mailto:devmikedel@google.com?Subject=Business%20inquiry%20(thereportplatform.com)" target="_top"">Contact by email</a></div>
+			</div>
+          <!-- aboutCopy end -->
+        </div>
+
+
+          <!-- end of middle column -->
+        </div>
+
+        <!-- end of row -->
+      </div>
+
+      <div class="col-lg-3">
+      </div>
+{% endblock content %}
