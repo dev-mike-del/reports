@@ -218,6 +218,87 @@ class BasicReportForm(forms.ModelForm):
 
 
 class BasicReportCommentForm(forms.ModelForm):
+
+    title_peer_review = forms.CharField(max_length=250,
+                                   widget=forms.Textarea(
+                                       attrs={
+                                        "class": "form-control",
+                                        "id": "titleCommentsControlTextarea1",
+                                        "placeholder": "Suggest a change here",
+                                        "rows": 5,},
+                                                  ),
+                                   required=False,)
+
+    executive_summary_peer_review = forms.CharField(max_length=800,
+                                   widget=forms.Textarea(
+                                       attrs={
+                                        "class": "form-control",
+                                        "id": "executive_summaryCommentsControlTextarea1",
+                                        "placeholder": "Suggest a change here",
+                                        "rows": 5,},
+                                                  ),
+                                   required=False,)
+
+    introduction_peer_review = forms.CharField(max_length=800,
+                                   widget=forms.Textarea(
+                                       attrs={
+                                        "class": "form-control",
+                                        "id": "introductionCommentsControlTextarea1",
+                                        "placeholder": "Suggest a change here",
+                                        "rows": 5,},
+                                                  ),
+                                   required=False,)
+
+    body_peer_review = forms.CharField(max_length=800,
+                                   widget=forms.Textarea(
+                                       attrs={
+                                        "class": "form-control",
+                                        "id": "bodyCommentsControlTextarea1",
+                                        "placeholder": "Suggest a change here",
+                                        "rows": 5,},
+                                                  ),
+                                   required=False,)
+
+    conclusion_peer_review = forms.CharField(max_length=800,
+                                   widget=forms.Textarea(
+                                       attrs={
+                                        "class": "form-control",
+                                        "id": "conclusionCommentsControlTextarea1",
+                                        "placeholder": "Suggest a change here",
+                                        "rows": 5,},
+                                                  ),
+                                   required=False,)
+
+    recommendations_peer_review = forms.CharField(max_length=800,
+                                   widget=forms.Textarea(
+                                       attrs={
+                                        "class": "form-control",
+                                        "id": "recommendationsCommentsControlTextarea1",
+                                        "placeholder": "Suggest a change here",
+                                        "rows": 5,},
+                                                  ),
+                                   required=False,)
+
+    references_peer_review = forms.CharField(max_length=800,
+                                   widget=forms.Textarea(
+                                       attrs={
+                                        "class": "form-control",
+                                        "id": "referencesCommentsControlTextarea1",
+                                        "placeholder": "Suggest a change here",
+                                        "rows": 5,},
+                                                  ),
+                                   required=False,)
+
+    tags_peer_review = forms.CharField(max_length=250,
+                                   widget=forms.Textarea(
+                                       attrs={
+                                        "class": "form-control",
+                                        "id": "tagsCommentsControlTextarea1",
+                                        "placeholder": "Suggest a change here",
+                                        "rows": 5,},
+                                                  ),
+                                   required=False,)
+
     class Meta:
         model = BasicReport
         fields = [

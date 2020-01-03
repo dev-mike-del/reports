@@ -225,6 +225,15 @@ class ReportPreviewView(
                                         'list',)
                                         )
 
+        if "make_comments" in self.request.POST:
+            report.save()
+            return HttpResponseRedirect(
+                reverse(
+                    'report_admin:comment',
+                    kwargs={'slug': report.slug}
+                    )
+                )
+
         if "publish" in self.request.POST:
             if report.tags_as_string:
                 for tag in report.tags_as_string.split(","):
