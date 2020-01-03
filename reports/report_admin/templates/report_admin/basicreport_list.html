@@ -175,16 +175,10 @@
 {% endblock content %}
 
 {% block javascript %}
-  {{ block.super }}
-
+{{ block.super }}
   <script>
-    Waypoint.offsetAliases['500-past-bottom'] = function() {
-      return this.context.innerHeight() - this.adapter.outerHeight() + 500
-    }
-    new Waypoint.Infinite({
-      element: $('.infinite-container')[0],
-      offset: '500-past-bottom'
-    })
+    setTimeout(function() {
+      $('#messageBar').slideUp('slow');
+    }, 2000); // <-- time in milliseconds
   </script>
-
 {% endblock javascript %}

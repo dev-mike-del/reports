@@ -13,6 +13,11 @@ urlpatterns = [
     	name='login',
     	),
 
+    path('logout/', 
+    	views.logout_request,
+    	name='logout',
+    	),
+
     path('profile/', 
     	views.ProflieListView.as_view(),
     	name='profile',

@@ -1,4 +1,5 @@
-from django.contrib.auth import login, authenticate
+from django.contrib import messages
+from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -10,6 +11,13 @@ from accounts.forms import CustomUserCreationForm
 from report_admin.models import BasicReport
 from users.models import User
 
+
+def logout_request(request):
+    logout(request)
+    messages.info(request, "Logged out successfully!")
+    return redirect("list")
+
+
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     template_name = 'accounts/signup.html'
@@ -20,7 +28,7 @@ class SignUpView(CreateView):
         user = User.objects.get(username=form.username)
         login(self.request, user)
         return HttpResponseRedirect(reverse('accounts:profile'))
-        
+
 
 class ProflieListView(LoginRequiredMixin, ListView):
     """docstring for ProflieListView"""
