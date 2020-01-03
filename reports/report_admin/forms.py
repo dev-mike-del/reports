@@ -217,6 +217,33 @@ class BasicReportForm(forms.ModelForm):
           ).order_by('last_name').exclude(id=user.id)
 
 
+    def clean(self):
+        reviewer = self.cleaned_data['reviewer']
+        title = self.cleaned_data['title']
+        executive_summary = self.cleaned_data['executive_summary']
+        
+        error_messages = []
+
+        if reviewer == None:
+            error_messages.append('Please select a Reviewer.')
+            self._errors["reviewer"] = "Please enter a valid reviewer"
+
+        if (title == "") or (title == "Example of a Title"):
+            error_messages.append('Please add content to the title section.')
+            self._errors["title"] = "Please enter a valid title"
+
+        if executive_summary == "":
+            error_messages.append('Please add content to the Executive Summary section.')
+            self._errors["executive_summary"] = "Please enter a valid implications"
+
+        if len(error_messages):
+            raise forms.ValidationError(' | '.join(error_messages))
+
+        return self.cleaned_data
+
+
+
+
 class BasicReportCommentForm(forms.ModelForm):
 
     title_peer_review = forms.CharField(max_length=250,

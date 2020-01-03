@@ -275,15 +275,15 @@
             {% if form.instance.author == request.user %}
               {% if object.status.title == "confirm" %}
                 <input name="typo" type="submit" value="Fix A Typo" class="btn btn-outline-secondary">
-                <input name="update" type="submit" value="Update Content" class="btn btn-info">
-                 <input name="cancel" type="submit" value="Cancel Recall" class="btn btn-info">
+                <input name="update" type="submit" value="Update Content" class="btn btn-info theme_color">
+                 <input name="cancel" type="submit" value="Cancel Recall" class="btn btn-info theme_color">
               {% else %}
                 <input name="edit" type="submit" value="Edit" class="btn btn-outline-secondary">
-                <input name="submit_for_review" type="submit" value="Submit for Review" class="btn btn-info">
+                <input name="submit_for_review" type="submit" value="Submit for Review" class="btn btn-info theme_color">
               {% endif %}
             {% elif form.instance.reviewer == request.user %}
               <input name="make_comments" type="submit" value="Make Comments" class="btn btn-outline-secondary">
-              <input name="publish" type="submit" value="Looks Good, Publish!" class="btn btn-info">
+              <input name="publish" type="submit" value="Looks Good, Publish!" class="btn btn-info theme_color">
             {% endif %}
             
         </div>

@@ -330,9 +330,9 @@ text-transform: uppercase;
 }
 
 /*Search Window*/
-.form-control, #id_username {
+/*.form-control, #id_username {
 	color: #ddd;
-}
+}*/
 
 #id_username, #id_password {
   width: 100%;
@@ -1081,4 +1081,8 @@ display: none;
 		margin-bottom: 6rem;
 	}
 
+}
+
+#view_details_button:hover {
+  background-color: #5D84B0;
 }

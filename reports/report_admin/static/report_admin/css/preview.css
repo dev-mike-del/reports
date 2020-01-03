@@ -139,7 +139,7 @@ tr {
 
 .tabColor {
     font-weight: 400;
-    color: #18A2B7;
+    color: #5D84B0;
 }
 
 .tab-content {
@@ -188,4 +188,8 @@ tr {
 
 .buttonsRow {
     padding: 0em 2em 3em 2em;
+}
+
+.theme_color, .theme_color:hover {
+    background-color: #5D84B0;
 }
