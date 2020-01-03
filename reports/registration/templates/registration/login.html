@@ -1,3 +1,11 @@
+{% extends 'accounts/profile_base.html' %}
+{% load static %}
+
+{% block css %}
+{{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'registration/css/login.css' %}">
+{% endblock css %}
+
 {% block content %}
 
 {% if form.errors %}
@@ -13,9 +21,9 @@
     {% endif %}
 {% endif %}
 
-<form method="post" action="{% url 'accounts:login' %}">
+<form class="text-center" method="post" action="{% url 'accounts:login' %}">
 {% csrf_token %}
-<table>
+<table id="login_table" class="mt-5">
 <tr>
     <td>{{ form.username.label_tag }}</td>
     <td>{{ form.username }}</td>
@@ -26,8 +34,10 @@
 </tr>
 </table>
 
-<input type="submit" value="login">
+<input id="login_button" class="btn btn-primary btn-lg mt-5" type="submit" value="login">
 <input type="hidden" name="next" value="{{ next }}">
+<h5 class="mt-2">or</h5>
+<a id="signup_button" class="btn btn-primary btn-lg" href="{% url 'accounts:signup' %}">signup</a>
 </form>
 
 {# Assumes you setup the password_reset view in your URLconf #}
