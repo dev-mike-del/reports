@@ -66,6 +66,16 @@ body {
     padding-top: .6em;
 }
 
+.glassesIcon_image, .planeIcon_image {
+    height: 1.25rem;
+    width: 3rem;
+}
+
+.pencilIcon_image {
+    height: 1.5rem;
+    width: 2.5rem;
+}
+
 .reviewPublishColumn {
     border: 1px solid rgba(77,172,223,.19);
     min-height: 8rem;
