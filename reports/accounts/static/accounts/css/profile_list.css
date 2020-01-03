@@ -161,6 +161,8 @@ body {
 
 .caughtUpImg {
 	margin-bottom: 1.6em;
+    height: 5rem;
+    width: 5rem;
 }
 
 .reviewPublishColumn {
