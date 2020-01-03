@@ -144,7 +144,7 @@
               <h4>tags:</h4>
               {% for tag in report.tags.all %}
 
-              <a href="search?tag={{ tag|urlencode }}" class="cardTag">{{ tag }}</a>
+              <a href="report_admin/search?tag={{ tag|urlencode }}" class="cardTag">{{ tag }}</a>
 
               {% endfor %}
             </div>

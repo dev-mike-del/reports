@@ -18,6 +18,10 @@ urlpatterns = [
         views.ReportPreviewView.as_view(),
         name='preview'),
 
+    path('search/',
+        views.ReportSearchView.as_view(),
+        name='search'),
+
     path('update/<slug>', 
         views.ReportUpdateView.as_view(),
         name='update'),

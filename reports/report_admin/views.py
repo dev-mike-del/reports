@@ -370,6 +370,9 @@ class ReportSearchView(ListView, FormView):
         return initial
 
     def get_queryset(self):
+        print("{}".format("X"*10))
+        print(self.request.GET)
+        print("{}".format("X"*10))
         object_list = ""
 
         try:
@@ -437,21 +440,6 @@ class ReportSearchView(ListView, FormView):
                         ),).filter(
                             Q(status=published),
                             Q(date_published__range=(from_date, to_date)),
-                            Q(search=search)
-                            ).all().order_by(
-                                '-date_published'
-                                )
-
-                elif search != '':
-                    reports = self.model.objects.annotate(search=SearchVector(
-                        'title', 
-                        'executive_summary', 
-                        'body', 
-                        'conclusion', 
-                        'recommendations', 
-                        'references',
-                        ),).filter(
-                            Q(status=published),
                             Q(search=search)
                             ).all().order_by(
                                 '-date_published'
@@ -554,11 +542,11 @@ class ReportSearchView(ListView, FormView):
 
                 elif (tag != ''):
                     reports = self.model.objects.filter(
-                        Q(status=published)
-                        ,Q(tags=tag)).all().order_by('-date_published')
+                        Q(status=published),
+                        Q(tags=tag)).all().order_by('-date_published')
 
                 elif (search != ''):
-                    threats = self.model.objects.annotate(search=SearchVector(
+                    reports = self.model.objects.annotate(search=SearchVector(
                         'title', 
                         'executive_summary', 
                         'body', 
