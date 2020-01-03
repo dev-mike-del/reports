@@ -21,8 +21,8 @@
 
     <div class="col-md-6">
       <!-- Create New Threat button -->
-      <div class="createNewReportBtn">
-        <a class="btn btn-info" href="{% url 'report_admin:create' %}">Create New Report</a>
+      <div>
+        <a class="btn btn-info createNewReportBtn" href="{% url 'report_admin:create' %}">Create New Report</a>
       </div>
     </div>
   <!-- row for header and button end -->
@@ -135,7 +135,7 @@
             Reports Sent For Review
           </div>
           <div class="bluePlaneIcon">
-            <img src="{% static 'accounts/img/pencil.svg' %}" alt="plane">
+            <img src="{% static 'accounts/img/plane.svg' %}" alt="plane">
           </div>
         </div>
         {% block reports_sent_for_review_card %}
