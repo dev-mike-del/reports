@@ -1,11 +1,16 @@
 {% extends 'accounts/profile_base.html' %}
 {% load static %}
 
+{% block css %}
+{{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/signup.css' %}">
+{% endblock css %}
+
 {% block content %}
   <h2>Sign up</h2>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Sign up</button>
+    <button id="signup_button" class="btn btn-primary btn-lg mt-5" type="submit">Sign up</button>
   </form>
 {% endblock %}

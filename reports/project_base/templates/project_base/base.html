@@ -47,8 +47,11 @@
                 <a class="nav-link text-center headernavs" href="{% url 'list'%}">Subscribe</a>
               </li>
             {% else %}
-              <li class="nav-item mr-3">
+              <li class="nav-item">
                 <a class="nav-link text-center headernavs" href="{% url 'accounts:login'%}">Login</a>
+              </li>
+              <li class="nav-item mr-3">
+                <a class="nav-link text-center headernavs" href="{% url 'accounts:signup'%}">Sign Up</a>
               </li>
             {% endif %}
 
