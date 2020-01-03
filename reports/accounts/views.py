@@ -1,10 +1,26 @@
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.shortcuts import render
-from django.views.generic import ListView
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.views.generic import CreateView, ListView
+from django.urls import reverse
 
+from accounts.forms import CustomUserCreationForm
 from report_admin.models import BasicReport
+from users.models import User
 
+class SignUpView(CreateView):
+    form_class = CustomUserCreationForm
+    template_name = 'accounts/signup.html'
+
+    def form_valid(self, form):
+        form = form.save(commit=False)
+        form.save()
+        user = User.objects.get(username=form.username)
+        login(self.request, user)
+        return HttpResponseRedirect(reverse('accounts:profile'))
+        
 
 class ProflieListView(LoginRequiredMixin, ListView):
     """docstring for ProflieListView"""
