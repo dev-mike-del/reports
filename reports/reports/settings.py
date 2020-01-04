@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'storages',
     'ckeditor',
     'users',
+    'subscriptions',
     'registration',
     'accounts',
     'project_base',

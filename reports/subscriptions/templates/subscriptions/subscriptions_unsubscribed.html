@@ -1,0 +1,58 @@
+{% extends 'project_base/base.html' %}
+{% load static %}
+
+{% block css %}
+{{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/list.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'subscriptions/css/base.css' %}">
+  <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,900|Oswald:300,400,700" rel="stylesheet">
+{% endblock css %}
+
+
+
+{% block title %} {{ block.super }} Reports{% endblock title %}
+
+{% block content %}
+{{ block.super }}
+
+		<div class="row">
+
+			<div class="col-lg-2">
+				<!-- empty column for spacing -->
+			</div>
+
+			<!-- The below div is the whole left side of the body content on a desktop -->
+			<div class="col-lg-7">
+
+
+
+				<div class="d-flex align-items-center">
+					<img src="{% static 'subscriptions/img/email_minus.png' %}" alt="Unsubscribed envelope icon" class="subscriptionsMessage email_minus_image">
+					You have successfully unsubscribed to all tags and will no longer receive email notifications.
+				</div>
+
+				<a href="{% url 'subscriptions:subscriptions_create_view' %}" class="btn btn-light mb-4 subscriptions_button">Back to Subscribe Page</a>
+
+			</div>
+
+			<!-- end of leftcolumn -->
+
+
+			<div class="col-lg-3 mb-5">
+				<h5 class="mt-4">Recent Tags</h5>
+				<small>Latest tags on the Cyber Threat Watch:</small>
+				<!-- These are the ten most current, individual tags on CTI.nike.com, in order of how recent they were published. Would want to make sure that we de-dupe these, too, so that we don't get doubles. These would be interactive, meaning people could click on them.  -->
+				<div class="recentTags">
+					{% for tag in recent_tags %}
+						<a href="{% url 'report_admin:search'%}?tag={{ tag|urlencode }}" class="cardTag">{{ tag }}</a>
+					{% endfor %}
+				</div>
+			</div>
+
+
+		</div>
+		<!-- end of container -->
+
+
+{% endblock content %}

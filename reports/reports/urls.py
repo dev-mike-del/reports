@@ -54,6 +54,11 @@ urlpatterns = [
         name='search',
         ),
 
+    path('subscriptions/', include(
+            'subscriptions.urls', 
+            namespace='subscriptions',
+            )),
+
     path('<slug>', 
         ReportDetailView.as_view(), 
         name='detail',

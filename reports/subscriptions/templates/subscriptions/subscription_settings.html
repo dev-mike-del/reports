@@ -1,0 +1,120 @@
+{% extends 'project_base/base.html' %}
+{% load static %}
+
+{% block css %}
+{{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'report_admin/css/list.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'subscriptions/css/base.css' %}">
+  <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,900|Oswald:300,400,700" rel="stylesheet">
+{% endblock css %}
+
+
+
+{% block title %} {{ block.super }} Reports{% endblock title %}
+
+
+{% block content %}
+{{ block.super }}
+
+		<div class="row">
+
+			<!-- The below div is the whole left side of the body content on a desktop -->
+			<div class="col-lg-7">
+
+				<!-- The "mt-4" class adds margin at the top -->
+				<h5 class="mt-4">Keep Up-to-date</h5>
+				<p class="mb-4">By subscribing to tags, you can keep securely up-to-date with technology you are interested in.</p>
+
+
+				<h5 class="mt-4">Your Current Tag Subscriptions</h5>
+
+				{% if subscriber.tags.all %}
+					<!-- When users have tags that they've already subscribed to, those tags are listed on their subscriptions profile page like this:   -->
+					{% for tag in subscriber.tags.all %}
+						<div class="tagLabel">{{tag}}</div>
+					{% endfor %}
+
+				{% else%}
+					<!-- These tags show up just as indicators of what you're currently subscribed to (when none, message saying "select below to subscribe to tags" or something like that). These show up in alphabetical order. Not sure yet if these would be interactive buttons or just a static, visual indicator of what you're subscribed to.  -->
+					<!-- The first time a user logs in they will see this printed to the screen -->
+					<div class="tagLabel">YOUR TAGS WILL SHOW HERE</div>
+				{% endif %}
+
+
+				<h5 class="mt-4">Manage Your Tag Subscriptions</h5>
+				<p class="mb-4">Select from the tags below which technologies are important to you and we'll send you an email notification when CTI has written something newsworthy on the topic.</p>
+
+
+				<form method="POST">
+				{% csrf_token %}
+
+				<div class="tagTabs mt-4">
+					<div class="tagsBodyArea">
+						<!-- A-E Tab items -->
+						{% for field in form %}
+						<div class="custom-control custom-checkbox mb-1">
+							<!-- <input type="checkbox" class="custom-control-input" id="10KBLAZE">
+							<label class="custom-control-label" for="10KBLAZE">10KBLAZE</label> -->
+							{{ field }}
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+
+
+				<div class="d-flex justify-content-between mb-5">
+
+		<!-- Unsubscribe button / One button to be able to unsubscribe from all tags if a person is just fed up and not finding this feature useful -->
+
+
+		{% if user.is_authenticated %}
+
+			{% if subscriber %}
+
+				<a class="btn btn-light subscriptions_button" href="{% url 'subscriptions:subscriptions_delete_view' subscriber_slug=subscriber.subscriber_slug %}">Unsubscribe from All</a>
+
+			{% endif %}
+
+		{% endif %}
+
+
+		<!-- If a user has no tags they are subscribed to, this is the button they see - The first time a user has subscribed to a tag -->
+		<input name="save_tags" type="submit" class="btn btn-light subscriptions_button" data-toggle="modal" data-target="#subscribeMessage" value="Subscribe to Selected Tags">
+
+
+		<!-- If a user HAS tags they are already subscribing to, this 'Update Tags Subscriptions' button will be the one they see, replacing the one they see above -->
+
+		<!-- <a href="subscriptions_updated.html" class="btn btn-success" data-toggle="modal" data-target="#updateSubscribeMessage">Update Tags Subscriptions</a> -->
+	  </div>
+	  </form>
+
+
+
+	  <!-- end of leftcolumn -->
+	</div>
+
+
+
+
+	<div class="col-lg-2">
+	  <!-- empty column for spacing -->
+	</div>
+
+	<div class="col-lg-3 mb-5">
+	  <h5 class="mt-4">Recent Tags</h5>
+	  <small>Latest tags on the Cyber Threat Watch:</small>
+	  <!-- These are the ten most current, individual tags on CTI.nike.com, in order of how recent they were published. Would want to make sure that we de-dupe these, too, so that we don't get doubles. These would be interactive, meaning people could click on them.  -->
+		<div class="recentTags">
+			{% for tag in recent_tags %}
+				<a href="{% url 'report_admin:search'%}?tag={{ tag|urlencode }}" class="cardTag">{{ tag }}</a>
+			{% endfor %}
+		</div>
+	</div>
+
+
+  </div>
+  <!-- end of container -->
+
+
+{% endblock content %}

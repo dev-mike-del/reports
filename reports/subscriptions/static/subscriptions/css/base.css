@@ -1,0 +1,64 @@
+.tagTabs {
+    background-color: #fff;
+}
+
+.tagsBodyArea {
+    padding: 1rem;
+    border: solid 1px #eaecf8;
+}
+
+#id_tags {
+    list-style: none;
+    padding-left: 0;
+}
+
+#id_tags > li {
+    font-family: 'Conv_Helveticabold', Arial, Geneva, sans-serif;
+    font-size: 1rem;
+    margin-bottom: .6rem;
+    font-weight: bold;
+}
+
+.btn-light {
+    font-family: 'TradeGothicforNike365-BdCn', Arial, Geneva, sans-serif;
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 1rem;
+    border: none;
+    margin-top: 2rem;
+    background-color: #5D84B0;
+}
+
+.email_check_image {
+    height: 5rem;
+    width: 7rem;
+}
+
+.email_minus_image {
+    height: 5rem;
+    width: 7rem;
+}
+
+.tagsBox {
+    background-color: #fff;
+    border-radius: .25rem;
+    padding: 1rem;
+}
+
+.tagLabel {
+    font-family: 'Conv_Helveticabold', Arial, Geneva, sans-serif;
+    display: inline-block;
+    letter-spacing: .02rem;
+    padding-right: 1rem;
+    text-transform: uppercase;
+    color: #000;
+    border-radius: 3px;
+    font-size: 1.1rem;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.subscriptions_button, .subscriptions_button:hover {
+    background-color: #5D84B0;
+    color: white;
+}
