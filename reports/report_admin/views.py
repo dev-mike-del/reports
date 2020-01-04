@@ -1,6 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.postgres.search import SearchVector
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives, get_connection
+from django.template.loader import render_to_string
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -22,6 +25,7 @@ from report_admin.forms import (
 from report_admin.models import BasicReport, BasicReportVersion
 
 from status.models import Status
+from subscriptions.models import Subscriber
 from tags.models import Tag
 
 
@@ -53,6 +57,12 @@ class ReportCreateView(
         context = super(ReportCreateView,
             self).get_context_data(**kwargs)
         context['tags'] = Tag.objects.all()
+        try:
+            subscriber = get_object_or_404(Subscriber,
+                                user=self.request.user)
+            context['subscriber'] = subscriber
+        except Exception:
+            pass
         return context
 
     def form_valid(self, form):
@@ -102,6 +112,12 @@ class ReportUpdateView(
         context['tags'] = Tag.objects.all()
         report = self.object
         context['report'] = report
+        try:
+            subscriber = get_object_or_404(Subscriber,
+                                user=self.request.user)
+            context['subscriber'] = subscriber
+        except Exception:
+            pass
         if self.request.user == report.author:
             return context
         else:
@@ -157,6 +173,12 @@ class ReportPreviewView(
             basic_report_unique_id=context['object'].unique_id
             ).order_by('-version')
         context['report_tags'] = context['object'].tags_as_string.split(",")
+        try:
+            subscriber = get_object_or_404(Subscriber,
+                                user=self.request.user)
+            context['subscriber'] = subscriber
+        except Exception:
+            pass
         if self.request.user == context['object'].author:
             if context['object'].status == published:
                 context['object'].status = confirm
@@ -235,22 +257,99 @@ class ReportPreviewView(
                 )
 
         if "publish" in self.request.POST:
-            if report.tags_as_string:
-                for tag in report.tags_as_string.split(","):
-                    tag_object, created = Tag.objects.get_or_create(title=tag)
-                    report.tags.add(tag_object)
+            if report.typo_update:
+                pass
+            else:
+                report.status = published
+                report.save()
+                tag_obj = []
+                tag_obj_messages = []
+                subscriber_tags_that_match = []
+
+                if report.tags_as_string:
+                    for tag in report.tags_as_string.split(","):
+                        tag_object, created = Tag.objects.get_or_create(title=tag.capitalize())
+                        report.tags.add(tag_object)
+
+                            
+                        tag_obj.append(tag_object)
+
+                # New Test Code 
+                for subscriber in Subscriber.objects.all():
+                    for tag in subscriber.tags.all():
+                        if tag in tag_obj:
+                            subscriber_tags_that_match.append(tag)
+                    if subscriber_tags_that_match:
+                        msg_plain = render_to_string('subscriptions/email.txt', {
+                            'user': subscriber.user, 'report': report, 
+                            'tags': ", ".join(map(str,subscriber_tags_that_match)),
+                            'tags_length':len(subscriber_tags_that_match)})
+                        msg_html = render_to_string('subscriptions/email.html', {
+                            'user': subscriber.user, 'report': report, 
+                            'tags': ", ".join(map(str,subscriber_tags_that_match)),
+                            'tags_length':len(subscriber_tags_that_match)})
+                        message = EmailMultiAlternatives('New Report from The Report Platform', 
+                            msg_plain, settings.EMAIL_HOST_USER, 
+                            (subscriber.user.email,),)
+
+                        message.attach_alternative(msg_html, "text/html")
+
+
+                        tag_obj_messages.append(message)
+                        subscriber_tags_that_match = []
+
+                connection = get_connection()
+                connection.open()
+                connection.send_messages([msg for msg in tag_obj_messages])
+                connection.close()
+            
             report.status = published
             report.save()
+
             messages.success(
                 self.request,
                 "{} has been published.".format(
                                     self.object
                                     )
                 )
+
             return HttpResponseRedirect(reverse(
                                         'accounts:profile',
                                         )
             )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -277,6 +376,12 @@ class ReportCommentView(
     def get_context_data(self, **kwargs):
         context = super(ReportCommentView,
             self).get_context_data(**kwargs)
+        try:
+            subscriber = get_object_or_404(Subscriber,
+                                user=self.request.user)
+            context['subscriber'] = subscriber
+        except Exception:
+            pass
         if self.request.user == context['object'].reviewer:
             return context
         else:
@@ -341,6 +446,17 @@ class ReportListView(ListView):
         return self.model.objects.filter(status__title='published'
             ).all().order_by('-date_published')
 
+    def get_context_data(self, **kwargs):
+        context = super(ReportListView,
+            self).get_context_data(**kwargs)
+        try:
+            subscriber = get_object_or_404(Subscriber,
+                                user=self.request.user)
+            context['subscriber'] = subscriber
+        except Exception:
+            pass
+        return context
+
 
 class ReportDetailView(DetailView):
     model = BasicReport
@@ -349,6 +465,17 @@ class ReportDetailView(DetailView):
     def get_queryset(self):
         return self.model.objects.filter(status__title='published'
             ).all()
+
+    def get_context_data(self, **kwargs):
+        context = super(ReportDetailView,
+            self).get_context_data(**kwargs)
+        try:
+            subscriber = get_object_or_404(Subscriber,
+                                user=self.request.user)
+            context['subscriber'] = subscriber
+        except Exception:
+            pass
+        return context
 
 
 class ReportSearchView(ListView, FormView):
@@ -368,6 +495,17 @@ class ReportSearchView(ListView, FormView):
         initial['to_date'] = self.request.GET.get('to_date')
         initial['tag'] = self.request.GET.get('tag')
         return initial
+
+    def get_context_data(self, **kwargs):
+        context = super(ReportSearchView,
+            self).get_context_data(**kwargs)
+        try:
+            subscriber = get_object_or_404(Subscriber,
+                                user=self.request.user)
+            context['subscriber'] = subscriber
+        except Exception:
+            pass
+        return context
 
     def get_queryset(self):
         print("{}".format("X"*10))
@@ -581,3 +719,14 @@ class ReportSearchView(ListView, FormView):
 
 class AboutView(TemplateView):
     template_name = 'report_admin/basicreport_about.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AboutView,
+            self).get_context_data(**kwargs)
+        try:
+            subscriber = get_object_or_404(Subscriber,
+                                user=self.request.user)
+            context['subscriber'] = subscriber
+        except Exception:
+            pass
+        return context

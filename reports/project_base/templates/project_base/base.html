@@ -44,7 +44,11 @@
                 <a class="nav-link text-center headernavs" href="{% url 'accounts:profile' %}">Profile</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-center headernavs" href="{% url 'list'%}">Subscribe</a>
+                {% if subscriber %}
+                  <a class="nav-link text-center headernavs" href="{% url 'subscriptions:settings' subscriber_slug=subscriber.subscriber_slug %}">Subscribe</a>
+                {% else %}
+                  <a class="nav-link text-center headernavs" href="{% url 'subscriptions:create' %}" >Subscribe</a>
+                {% endif %}
               </li>
               <li class="nav-item mr-3">
                 <a class="nav-link text-center headernavs" href="{% url 'accounts:logout'%}">Logout</a>

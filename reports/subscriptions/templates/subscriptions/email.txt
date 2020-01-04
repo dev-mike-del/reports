@@ -1,0 +1,13 @@
+{{ user.first_name }},
+
+The Report Platform just published a new report, "{{ report.title }}."
+
+You have received this notification due to the following tag subscription{{ tags_length|pluralize }}: {{ tags }}.
+
+
+Thank you,
+
+The Report Platfrom Subscription Team
+
+
+To unsubscribe or update your subscription settings, please visit the The Report Platfrom and navigate to the Subscribe page.

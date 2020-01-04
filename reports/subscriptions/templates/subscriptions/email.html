@@ -1,0 +1,10 @@
+<p>{{ user.first_name }},</p>
+
+<p>The Report Platform just published a new report, <a href="https://thereportplatfrom.com{% url 'detail' slug=report.slug %}" class="card-title">"{{ report.title }}."</a></p>
+<p>You have received this notification due to the following tag subscription{{ tags_length|pluralize }}: {{ tags }}.</p>
+<br>
+<p>Thank you,</p>
+<p>The Report Platfrom Subscription Team</p>
+<br>
+<br>
+<p><small>To unsubscribe or update your subscription settings, please visit <a href="https://thereportplatfrom.com" class="card-title">The Report Platform</a> and navigate to the Subscribe page.</small></p>

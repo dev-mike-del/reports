@@ -27,7 +27,7 @@
 
 				<div class="d-flex align-items-center">
 					<img src="{% static 'subscriptions/img/email_check.png' %}" alt="Unsubscribed envelope icon" class="subscriptionsMessage email_check_image">
-					You have updated your tags subscriptions and will now start receiving email notifications when CTI publishes briefs on these topics:
+					You have updated your tags subscriptions and will now start receiving email notifications when The Report Platform publishes reports on these topics:
 				</div>
 
 				<!-- These tags show up just as indicators of what you're currently subscribed to (when none, message saying "select below to subscribe to tags" or something like that). These show up in alphabetical order. Not sure yet if these would be interactive buttons or just a static, visual indicator of what you're subscribed to.  -->
@@ -39,9 +39,13 @@
 				</div>
 
 
+				{% if subscriber %}
+					<a class="btn btn-light mb-4 subscriptions_button" href="{% url 'subscriptions:settings' subscriber_slug=subscriber.subscriber_slug %}">Back to Subscribe Page</a>
+				{% else %}
+					<a class="btn btn-light mb-4 subscriptions_button" href="{% url 'subscriptions:create'%}" >Back to Subscribe Page</a>
+				{% endif %}
 
 
-				<a href="{% url 'subscriptions:subscriptions_update_view' subscriber_slug=subscriber.subscriber_slug %}" class="btn btn-light mb-4 subscriptions_button">Back to Subscribe page</a>
 			</div>
 
 			<!-- end of left column -->

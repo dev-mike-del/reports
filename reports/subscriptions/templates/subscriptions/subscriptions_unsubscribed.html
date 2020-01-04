@@ -32,7 +32,11 @@
 					You have successfully unsubscribed to all tags and will no longer receive email notifications.
 				</div>
 
-				<a href="{% url 'subscriptions:subscriptions_create_view' %}" class="btn btn-light mb-4 subscriptions_button">Back to Subscribe Page</a>
+				{% if subscriber.subscriber_slug %}
+					<a class="btn btn-light mb-4 subscriptions_button" href="{% url 'subscriptions:settings' subscriber_slug=subscriber.subscriber_slug %}">Back to Subscribe Page</a>
+				{% else %}
+					<a class="btn btn-light mb-4 subscriptions_button" href="{% url 'subscriptions:create'%}" >Back to Subscribe Page</a>
+				{% endif %}
 
 			</div>
 

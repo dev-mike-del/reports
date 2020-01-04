@@ -168,8 +168,7 @@ class SubscriptionsDeleteViewSuccess(LoginRequiredMixin, TemplateView):
 		context['recent_tags'] = clean_tag_list[::-1]
 
 		try:
-			subscriber = get_object_or_404(Subscriber,
-								user=self.request.user)
+			subscriber = Subscriber.objects.get(user=self.request.user)
 			context['subscriber'] = subscriber
 		except Exception:
 			pass

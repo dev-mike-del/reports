@@ -192,4 +192,5 @@ tr {
 
 .theme_color, .theme_color:hover {
     background-color: #5D84B0;
+    color: white;
 }

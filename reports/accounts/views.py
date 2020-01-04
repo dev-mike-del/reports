@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.conf import settings
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -10,6 +11,8 @@ from django.urls import reverse
 from accounts.forms import CustomUserCreationForm
 from report_admin.models import BasicReport
 from users.models import User
+
+from subscriptions.models import Subscriber
 
 
 def logout_request(request):
@@ -75,4 +78,12 @@ class ProflieListView(LoginRequiredMixin, ListView):
                                     Q(author=self.request.user),
                                     Q(status__title="sent_for_review") |
                                     Q(status__title="review")).all().order_by('-date_modified')
+
+        try:
+            user = User.objects.get(id=self.request.user.id)
+            subscriber = Subscriber.objects.get(user=user)
+            context['subscriber'] = subscriber
+        except Exception:
+            pass
+
         return context
